@@ -1,7 +1,7 @@
 package com.goodcode.alucard.bpm.services
 
-import com.goodcode.alucard.bpm.templates.TaskTemplate
+import com.goodcode.alucard.bpm.tasks.Task
 
 interface IBpmService {
-    fun startInstance(taskTemplate: TaskTemplate): Unit
+    fun startInstance(taskTemplate: Task): Unit
 }

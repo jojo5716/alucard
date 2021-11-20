@@ -1,7 +1,7 @@
 package com.goodcode.alucard.modelBuilder.model.controller
 
 import com.goodcode.alucard.bpm.services.BpmService
-import com.goodcode.alucard.bpm.templates.CreateModelTemplate
+import com.goodcode.alucard.bpm.tasks.CreateModel
 import com.goodcode.alucard.modelBuilder.model.request.CreateModelRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,9 +16,7 @@ class ModelController(private val bpmService: BpmService){
 
     @PostMapping("/create")
     fun createModel(@RequestBody body: CreateModelRequest) : ResponseEntity<Boolean> {
-        println("Creating model...")
-
-        val createModelTemplate = CreateModelTemplate(body.businessKey, body.variables)
+        val createModelTemplate = CreateModel(body.businessKey, body.variables)
 
         bpmService.startInstance(createModelTemplate)
 
