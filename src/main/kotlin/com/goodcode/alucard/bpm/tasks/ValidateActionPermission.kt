@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
-class CreateModelTask(
+class ValidateActionPermission(
     val businessKey: String,
     private val variables: Map<String, Any>?,
-    @Value("\${kafka.topics.createModelTask}") private val createModelTaskName: String
-) : Task(createModelTaskName), ITask {
+    @Value("\${kafka.topics.validateActionPermission}") private val validateActionPermissionTaskName: String
+) : Task(validateActionPermissionTaskName), ITask {
     override fun handle() {
-        Logger.getGlobal().info("Starting CreateModelTask with businessKey: $businessKey")
+        Logger.getGlobal().info("Starting ValidateActionPermission with businessKey: $businessKey")
 
 //        complete()
     }

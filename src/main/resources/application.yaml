@@ -6,22 +6,24 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     locations: filesystem:./db/migration
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        enable_lazy_load_no_trans: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
-  servlet:
-    multipart:
-      max-file-size: 30MB
-      max-request-size: 30MB
-  cache:
-    jcache:
-      provider: org.ehcache.jsr107.EhcacheCachingProvider
-      config: classpath:ehcache.xml
+
+jpa:
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      enable_lazy_load_no_trans: true
+      jdbc:
+        lob:
+          non_contextual_creation: true
+servlet:
+  multipart:
+    max-file-size: 30MB
+    max-request-size: 30MB
+
+cache:
+  jcache:
+    provider: org.ehcache.jsr107.EhcacheCachingProvider
+    config: classpath:ehcache.xml
 
 server:
   port: 8081
@@ -38,3 +40,8 @@ logging:
       hibernate: INFO
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %highlight(%-5level) %magenta(%logger.%M) - %msg%n%rEx"
+#
+#kafka:
+#  topics:
+#    createModelTask: CreateModelTask
+#    validateActionPermission: ValidateActionPermission

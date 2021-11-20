@@ -16,7 +16,7 @@ class ModelController(private val bpmService: BpmService){
 
     @PostMapping("/create")
     fun createModel(@RequestBody body: CreateModelRequest) : ResponseEntity<Boolean> {
-        val createModelTaskTemplate = CreateModelTask(body.businessKey, body.variables)
+        val createModelTaskTemplate = CreateModelTask(body.businessKey, body.variables, "createModelTask")
 
         bpmService.startInstance(createModelTaskTemplate)
 

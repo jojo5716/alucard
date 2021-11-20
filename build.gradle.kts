@@ -11,6 +11,8 @@ plugins {
 group = "com.goodcode"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+val jacksonVersion = "2.9.6"
+val kafkaVersion = "2.6.0"
 
 repositories {
 	mavenCentral()
@@ -23,6 +25,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.postgresql:postgresql")
+//	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+//	implementation("org.apache.kafka:kafka-clients:$kafkaVersion")
+
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

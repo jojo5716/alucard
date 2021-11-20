@@ -2,6 +2,7 @@ package com.goodcode.alucard.bpm.services
 
 import com.goodcode.alucard.bpm.tasks.CreateModelTask
 import com.goodcode.alucard.bpm.tasks.Task
+import com.goodcode.alucard.bpm.tasks.ValidateActionPermission
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
@@ -12,6 +13,7 @@ class BpmService: IBpmService {
 
         when(taskTemplate) {
             is CreateModelTask -> taskTemplate.handle()
+            is ValidateActionPermission -> taskTemplate.handle()
         }
     }
 }
