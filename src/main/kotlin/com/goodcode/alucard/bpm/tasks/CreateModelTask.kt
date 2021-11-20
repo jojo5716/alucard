@@ -2,7 +2,7 @@ package com.goodcode.alucard.bpm.tasks
 
 import java.util.logging.Logger
 
-data class CreateModel(
+data class CreateModelTask(
     val businessKey: String,
     val variables: Map<String, Any>?
 ) : Task() {
