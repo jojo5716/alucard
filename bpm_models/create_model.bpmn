@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0hjxvrp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
-  <bpmn:process id="Process_1d8fvlt" isExecutable="true">
+  <bpmn:process id="CreateModelProcess" name="Create model process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1ovbo72</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="ValidateCreateModelDataTask" name="Validate create model data task" camunda:type="external" camunda:topic="validateCreateModelData">
       <bpmn:incoming>Flow_1ovbo72</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rnbn5l</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1ovbo72" sourceRef="StartEvent_1" targetRef="ValidateCreateModelDataTask" />
+    <bpmn:endEvent id="Event_0ynqxun">
+      <bpmn:incoming>Flow_1rnbn5l</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1rnbn5l" sourceRef="ValidateCreateModelDataTask" targetRef="Event_0ynqxun" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1d8fvlt">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CreateModelProcess">
       <bpmndi:BPMNEdge id="Flow_1ovbo72_di" bpmnElement="Flow_1ovbo72">
         <di:waypoint x="215" y="117" />
         <di:waypoint x="290" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rnbn5l_di" bpmnElement="Flow_1rnbn5l">
+        <di:waypoint x="390" y="117" />
+        <di:waypoint x="602" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_07d48mk_di" bpmnElement="ValidateCreateModelDataTask">
         <dc:Bounds x="290" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1pbm6hk_di" bpmnElement="Event_0ynqxun">
+        <dc:Bounds x="602" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
