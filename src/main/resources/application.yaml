@@ -44,4 +44,10 @@ logging:
     console: "%d{dd-MM-yyyy HH:mm:ss} %highlight(%-5level) %magenta(%logger.%M) - %msg%n%rEx"
 
 bpm:
+  baseUrl: http://localhost:8080/engine-rest
   pollingDelayMs: 15000
+  endpoints:
+    startProcess: /process-definition/key/$processDefinitionKey/start
+  processDefinitionKeys:
+    createModel: CreateModelProcess
+
