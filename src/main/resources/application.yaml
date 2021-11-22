@@ -42,17 +42,6 @@ logging:
       hibernate: INFO
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %highlight(%-5level) %magenta(%logger.%M) - %msg%n%rEx"
-#
-#kafka:
-#  broker: "localhost:9092"
-#  serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-#  deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#  schema-registry-url: "http://localhost:3000"
-#  bootstrap-servers: kafkaserver:9092
-#  consumer:
-#    group-id: myGroup
-#  topic:
-#    name: "service_task_dispatcher_task"
 
 bpm:
   pollingDelayMs: 15000
