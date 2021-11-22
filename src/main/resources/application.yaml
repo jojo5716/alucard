@@ -8,6 +8,7 @@ spring:
     locations: filesystem:./db/migration
 
 jpa:
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
   properties:
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -15,6 +16,7 @@ jpa:
       jdbc:
         lob:
           non_contextual_creation: true
+
 servlet:
   multipart:
     max-file-size: 30MB
@@ -26,7 +28,7 @@ cache:
     config: classpath:ehcache.xml
 
 server:
-  port: 8081
+  port: 3000
   error:
     include-stacktrace: never
 
@@ -42,6 +44,15 @@ logging:
     console: "%d{dd-MM-yyyy HH:mm:ss} %highlight(%-5level) %magenta(%logger.%M) - %msg%n%rEx"
 #
 #kafka:
-#  topics:
-#    createModelTask: CreateModelTask
-#    validateActionPermission: ValidateActionPermission
+#  broker: "localhost:9092"
+#  serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#  deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#  schema-registry-url: "http://localhost:3000"
+#  bootstrap-servers: kafkaserver:9092
+#  consumer:
+#    group-id: myGroup
+#  topic:
+#    name: "service_task_dispatcher_task"
+
+bpm:
+  pollingDelayMs: 15000
