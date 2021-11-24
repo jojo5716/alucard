@@ -1,5 +1,7 @@
 package com.goodcode.alucard.bpm
 
+import com.goodcode.alucard.bpm.dispatcher.ServiceTasks
+import com.goodcode.alucard.gateways.JourneyGateway
 import org.springframework.stereotype.Service
 import org.springframework.scheduling.annotation.Scheduled
 import java.util.concurrent.ScheduledExecutorService
@@ -17,9 +19,17 @@ class ScheduledForcedTaskMessage(private val forcedTaskMessage: ForcedTaskMessag
 }
 
 class ForcedTaskMessages(
-    private val executorService: ScheduledExecutorService
+    private val executorService: ScheduledExecutorService,
+    private val journeyGateway: JourneyGateway
 ) {
     fun consume() {
+        try {
+            val response = journeyGateway.getProcessInstance()
+            println(response)
+        } catch (ex: Exception) {
+            println("ERROR getting process intances :$ex")
+        }
+
         executorService.schedule(
             {
                 kotlin.run {

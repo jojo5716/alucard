@@ -48,6 +48,7 @@ bpm:
   pollingDelayMs: 15000
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
+    getProcessInstance: /process-instance
   processDefinitionKeys:
     createModel: CreateModelProcess
 

@@ -1,6 +1,7 @@
 package com.goodcode.alucard.gateways
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.goodcode.alucard.utils.IGetRequest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
@@ -11,14 +12,6 @@ import java.net.URI
 
 @Service
 class RequestBuilder {
-    fun authorizedPost(
-        body: Any,
-        customHeaders: Map<String, String> = mapOf(),
-        uri: String
-    ): RequestEntity<Any> {
-        return post(body, customHeaders, uri)
-    }
-
     fun post(body: Any, customHeaders: Map<String, String> = mapOf(), uri: String) = RequestEntity<Any>(
         addFormattedBody(body),
         addHeaders(customHeaders),
@@ -26,32 +19,15 @@ class RequestBuilder {
         URI(uri)
     )
 
-    fun authorizedPatch(
-        body: Any,
-        customHeaders: Map<String, String> = mapOf(),
-        uri: String,
-    ): RequestEntity<Any> {
-        return RequestEntity(
-            addFormattedBody(body),
-            addHeaders(customHeaders),
-            HttpMethod.PATCH,
-            URI(uri)
-        )
-    }
-
-    fun authorizedPut(
-        body: Any,
+    fun get(
+        params: IGetRequest? = null,
         customHeaders: Map<String, String> = mapOf(),
         uri: String
-    ): RequestEntity<Any> {
-
-        return RequestEntity(
-            addFormattedBody(body),
-            addHeaders(customHeaders),
-            HttpMethod.PUT,
-            URI(uri)
-        )
-    }
+    ): RequestEntity<Any> = RequestEntity(
+        addHeaders(customHeaders),
+        HttpMethod.GET,
+        URI("$uri${params?.toQuery()?.prependIndent("?").orEmpty()}")
+    )
 
     private fun addFormattedBody(body: Any) = jacksonObjectMapper().writeValueAsString(body)
 
