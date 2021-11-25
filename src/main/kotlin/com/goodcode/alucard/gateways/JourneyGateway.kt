@@ -1,8 +1,10 @@
 package com.goodcode.alucard.gateways
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.goodcode.alucard.bpm.responses.ProcessInstanceResponse
 import com.goodcode.alucard.utils.Variable
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -27,13 +29,12 @@ class JourneyGateway(
         sendRequest<Unit>(request)
     }
 
-//    fun getProcessInstance(): ResponseEntity<ProcessInstanceResponse> {
-    fun getProcessInstance(): ArrayList<ProcessInstanceResponse> {
+    fun getProcessInstance(): Array<ProcessInstanceResponse> {
         val request = requestBuilder.get(
             uri = (baseUrl + processInstanceEndpoint)
         )
 
-        return sendRequest<ArrayList<ProcessInstanceResponse>>(request).body!!
+        return sendRequest<Array<ProcessInstanceResponse>>(request).body!!
     }
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {

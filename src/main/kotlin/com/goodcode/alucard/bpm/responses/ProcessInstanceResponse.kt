@@ -8,5 +8,5 @@ data class ProcessInstanceResponse(
     val caseInstanceId: String?,
     val ended: Boolean,
     val suspended: Boolean,
-    val tenantId: String,
+    val tenantId: String?,
 )
