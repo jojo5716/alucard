@@ -1,6 +1,7 @@
 package com.goodcode.alucard.gateways
 
 import com.goodcode.alucard.bpm.responses.TaskResponse
+import com.goodcode.alucard.bpm.responses.TaskVariablesResponse
 import com.goodcode.alucard.utils.Variable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.RequestEntity
@@ -35,12 +36,12 @@ class JourneyGateway(
         return sendRequest<Array<TaskResponse>>(request).body!!
     }
 
-    fun getTaskVariables(taskId: String): Array<TaskResponse> {
+    fun getTaskVariables(taskId: String): TaskVariablesResponse {
         val request = requestBuilder.get(
             uri = (baseUrl + taskVariablesEndpoint.replace("\$taskId", taskId))
         )
 
-        return sendRequest<Array<TaskResponse>>(request).body!!
+        return sendRequest<TaskVariablesResponse>(request).body!!
     }
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {
