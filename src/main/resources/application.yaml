@@ -49,6 +49,7 @@ bpm:
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
     pendingTaskList: /history/activity-instance?maxResults=3&finished=false
+    taskVariables: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitionKeys:
     createModel: CreateModelProcess
 

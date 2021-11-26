@@ -1,7 +1,6 @@
 package com.goodcode.alucard.bpm.dispatcher
 
 import com.goodcode.alucard.bpm.responses.TaskResponse
-import com.goodcode.alucard.bpm.tasks.CreateModelTask
 import com.goodcode.alucard.bpm.tasks.ValidateActionPermission
 import org.springframework.stereotype.Service
 import java.util.logging.Logger

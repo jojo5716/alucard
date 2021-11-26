@@ -15,8 +15,9 @@ class JourneyGateway(
     private val restTemplate: RestTemplate,
     @Value("\${bpm.baseUrl}") private val baseUrl: String,
     @Value("\${bpm.endpoints.startProcess}") private val startProcessEndpoint: String,
-    @Value("\${bpm.endpoints.pendingTaskList}") private val pendingTaskList: String
-    ) {
+    @Value("\${bpm.endpoints.pendingTaskList}") private val pendingTaskListEndpoint: String,
+    @Value("\${bpm.endpoints.taskVariables}") private val taskVariablesEndpoint: String
+) {
     fun start(processDefinitionKey: String, businessKey: String, variables: Map<String, Variable>) {
         val request = requestBuilder.post(
             body = (mapOf("businessKey" to businessKey) + mapOf("variables" to (variables ?: emptyMap()))),
@@ -28,7 +29,15 @@ class JourneyGateway(
 
     fun getPendingTasks(): Array<TaskResponse> {
         val request = requestBuilder.get(
-            uri = (baseUrl + pendingTaskList)
+            uri = (baseUrl + pendingTaskListEndpoint)
+        )
+
+        return sendRequest<Array<TaskResponse>>(request).body!!
+    }
+
+    fun getTaskVariables(taskId: String): Array<TaskResponse> {
+        val request = requestBuilder.get(
+            uri = (baseUrl + taskVariablesEndpoint.replace("\$taskId", taskId))
         )
 
         return sendRequest<Array<TaskResponse>>(request).body!!

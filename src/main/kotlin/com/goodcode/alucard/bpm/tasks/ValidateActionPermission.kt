@@ -1,14 +1,15 @@
 package com.goodcode.alucard.bpm.tasks
 
 import com.goodcode.alucard.bpm.responses.TaskResponse
-import org.springframework.beans.factory.annotation.Value
+import com.goodcode.alucard.gateways.JourneyGateway
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
 @Service
-class ValidateActionPermission: Task("validateActionPermissionTaskName"), ITask {
+class ValidateActionPermission(journeyGateway: JourneyGateway): Task(journeyGateway), ITask {
     override fun handle(task: TaskResponse) {
-        Logger.getGlobal().info("Starting ValidateActionPermission with businessKey")
-
+        Logger.getGlobal().info("Starting ValidateActionPermission with id ${task.id}")
+        val variables = getVariables(task.id)
+        println(variables)
     }
 }
