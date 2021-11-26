@@ -7,6 +7,6 @@ interface IServiceTask {
 }
 
 enum class ServiceTasks(override val activityId: String, override val topic: String) : IServiceTask {
-    CREATE_MODEL(activityId = "CreateModelTask", topic = "createModel"),
-    VALIDATE_HIERARCHY(activityId = "ValidateHierarchy", topic = "validateHierarchy")
+    CREATE_MODEL(activityId = "CreateModelProcess", topic = "createModel"),
+    VALIDATE_ACTION(activityId = "ValidateActionPermissionTask", topic = "validateActionPermission")
 }

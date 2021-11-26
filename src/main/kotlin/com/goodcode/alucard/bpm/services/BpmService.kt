@@ -10,10 +10,5 @@ import java.util.logging.Logger
 class BpmService: IBpmService {
     override fun startInstance(taskTemplate: Task) {
         Logger.getGlobal().info("Starting BPM... $taskTemplate")
-
-        when(taskTemplate) {
-            is CreateModelTask -> taskTemplate.handle()
-            is ValidateActionPermission -> taskTemplate.handle()
-        }
     }
 }

@@ -1,14 +1,11 @@
 package com.goodcode.alucard.gateways
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.goodcode.alucard.bpm.responses.ProcessInstanceResponse
+import com.goodcode.alucard.bpm.responses.TaskResponse
 import com.goodcode.alucard.utils.Variable
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.logging.Logger
 
@@ -18,7 +15,7 @@ class JourneyGateway(
     private val restTemplate: RestTemplate,
     @Value("\${bpm.baseUrl}") private val baseUrl: String,
     @Value("\${bpm.endpoints.startProcess}") private val startProcessEndpoint: String,
-    @Value("\${bpm.endpoints.getProcessInstance}") private val processInstanceEndpoint: String
+    @Value("\${bpm.endpoints.pendingTaskList}") private val pendingTaskList: String
     ) {
     fun start(processDefinitionKey: String, businessKey: String, variables: Map<String, Variable>) {
         val request = requestBuilder.post(
@@ -29,12 +26,12 @@ class JourneyGateway(
         sendRequest<Unit>(request)
     }
 
-    fun getProcessInstance(): Array<ProcessInstanceResponse> {
+    fun getPendingTasks(): Array<TaskResponse> {
         val request = requestBuilder.get(
-            uri = (baseUrl + processInstanceEndpoint)
+            uri = (baseUrl + pendingTaskList)
         )
 
-        return sendRequest<Array<ProcessInstanceResponse>>(request).body!!
+        return sendRequest<Array<TaskResponse>>(request).body!!
     }
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {

@@ -1,0 +1,25 @@
+package com.goodcode.alucard.bpm.responses
+
+data class TaskResponse(
+    val id: String,
+    val parentActivityInstanceId: String,
+    val activityId: String,
+    val activityName: String,
+    val activityType: String,
+    val processDefinitionKey: String,
+    val processDefinitionId: String,
+    val processInstanceId: String,
+    val executionId: String,
+    val taskId: String?,
+    val calledProcessInstanceId: String?,
+    val calledCaseInstanceId: String?,
+    val assignee: String?,
+    val startTime: String,
+    val endTime: String?,
+    val durationInMillis: String?,
+    val canceled: String?,
+    val completeScope: String?,
+    val tenantId: String?,
+    val removalTime: String?,
+    val rootProcessInstanceId: String,
+)

@@ -25,7 +25,7 @@ class ForcedTaskMessages(
 ) {
     fun consume() {
         try {
-            journeyGateway.getProcessInstance().map {
+            journeyGateway.getPendingTasks().forEach {
                 bpmDispatcher.dispatch(it)
             }
         } catch (ex: Exception) {
