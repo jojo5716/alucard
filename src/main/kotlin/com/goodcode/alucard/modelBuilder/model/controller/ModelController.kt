@@ -1,7 +1,7 @@
 package com.goodcode.alucard.modelBuilder.model.controller
 
 import com.goodcode.alucard.gateways.JourneyGateway
-import com.goodcode.alucard.modelBuilder.model.request.RequestSchema
+import com.goodcode.alucard.modelBuilder.model.request.RequestCreateModelSchema
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ class ModelController(
 ) {
 
     @PostMapping("/create")
-    fun createModel(@RequestBody body: RequestSchema): ResponseEntity<Boolean> {
+    fun createModel(@RequestBody body: RequestCreateModelSchema): ResponseEntity<Boolean> {
         journeyGateway.start(createModel, body)
 
         return ResponseEntity.status(HttpStatus.OK).body(true)
