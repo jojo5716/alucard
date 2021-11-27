@@ -9,7 +9,7 @@ import java.util.logging.Logger
 class ValidateActionPermission(journeyGateway: JourneyGateway) : Task(journeyGateway), ITask {
     override fun handle(task: TaskResponse) {
         Logger.getGlobal().info("Starting ValidateActionPermission with id ${task.id}")
-        val variables = getVariables(task.parentActivityInstanceId)
+        val variables = getVariables(task.processInstanceId)
         println(variables)
     }
 }

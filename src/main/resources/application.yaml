@@ -45,10 +45,10 @@ logging:
 
 bpm:
   baseUrl: http://localhost:8080/engine-rest
-  pollingDelayMs: 15000
+  pollingDelayMs: 5000
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
-    pendingTaskList: /history/activity-instance?maxResults=3&finished=false&canceled=false
+    pendingTaskList: /external-task
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitionKeys:
