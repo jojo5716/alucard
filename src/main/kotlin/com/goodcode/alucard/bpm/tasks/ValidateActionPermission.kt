@@ -1,15 +1,23 @@
 package com.goodcode.alucard.bpm.tasks
 
-import com.goodcode.alucard.bpm.responses.TaskResponse
-import com.goodcode.alucard.gateways.JourneyGateway
-import org.springframework.stereotype.Service
+import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
+import org.camunda.bpm.client.task.ExternalTask
+import org.camunda.bpm.client.task.ExternalTaskHandler
+import org.camunda.bpm.client.task.ExternalTaskService
+import org.camunda.bpm.engine.variable.Variables
+import org.springframework.stereotype.Component
 import java.util.logging.Logger
 
-@Service
-class ValidateActionPermission(journeyGateway: JourneyGateway) : Task(journeyGateway), ITask {
-    override fun handle(task: TaskResponse) {
-        Logger.getGlobal().info("Starting ValidateActionPermission with id ${task.id}")
-        val variables = getVariables(task.processInstanceId)
-        println(variables)
+
+@Component
+@ExternalTaskSubscription(topicName = "validateActionPermission", autoOpen = true)
+class ValidateActionPermission : ExternalTaskHandler {
+    override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
+        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
+
+        val variables = Variables.createVariables()
+        variables["userHasPermissions"] = true
+        externalTaskService.complete(externalTask, variables)
     }
 }
+

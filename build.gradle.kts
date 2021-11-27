@@ -33,6 +33,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.postgresql:postgresql")
 	implementation("org.apache.httpcomponents:httpclient:4.5.12")
+	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-external-task-client:7.16.0")
 
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

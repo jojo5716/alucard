@@ -39,6 +39,10 @@ logging:
         logbook: INFO
       springframework:
         web: INFO
+      camunda:
+        bpm:
+          client:
+            sprint: DEBUG
       hibernate: INFO
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %highlight(%-5level) %magenta(%logger.%M) - %msg%n%rEx"
@@ -46,6 +50,9 @@ logging:
 bpm:
   baseUrl: http://localhost:8080/engine-rest
   pollingDelayMs: 5000
+  maxTasks: 10
+  lockDuration: 10000
+  workerId: worker_service_task
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
     pendingTaskList: /external-task
@@ -53,4 +60,3 @@ bpm:
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitionKeys:
     createModel: CreateModelProcess
-

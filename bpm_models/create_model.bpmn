@@ -4,12 +4,12 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1ovbo72</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="ValidateActionPermissionTask" name="Validate action permissions" camunda:type="external" camunda:topic="ValidateActionPermission">
+    <bpmn:serviceTask id="ValidateActionPermissionTask" name="Validate action permissions" camunda:type="external" camunda:topic="validateActionPermission">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="modelName">${modelName}</camunda:inputParameter>
           <camunda:inputParameter name="action">${action}</camunda:inputParameter>
-          <camunda:outputParameter name="userHasPermissions">false</camunda:outputParameter>
+          <camunda:outputParameter name="userHasPermissions">${userHasPermissions}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ovbo72</bpmn:incoming>
