@@ -2,6 +2,7 @@ package com.goodcode.alucard.gateways
 
 import com.goodcode.alucard.bpm.responses.TaskResponse
 import com.goodcode.alucard.bpm.responses.TaskVariablesResponse
+import com.goodcode.alucard.modelBuilder.model.request.RequestSchema
 import com.goodcode.alucard.utils.Variable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.RequestEntity
@@ -17,11 +18,12 @@ class JourneyGateway(
     @Value("\${bpm.baseUrl}") private val baseUrl: String,
     @Value("\${bpm.endpoints.startProcess}") private val startProcessEndpoint: String,
     @Value("\${bpm.endpoints.pendingTaskList}") private val pendingTaskListEndpoint: String,
-    @Value("\${bpm.endpoints.taskVariables}") private val taskVariablesEndpoint: String
+    @Value("\${bpm.endpoints.taskVariables}") private val taskVariablesEndpoint: String,
+    @Value("\${bpm.endpoints.completeTask}") private val completeTaskEndpoint: String
 ) {
-    fun start(processDefinitionKey: String, businessKey: String, variables: Map<String, Variable>) {
+    fun start(processDefinitionKey: String, body: RequestSchema) {
         val request = requestBuilder.post(
-            body = (mapOf("businessKey" to businessKey) + mapOf("variables" to (variables ?: emptyMap()))),
+            body = body,
             uri = (baseUrl + startProcessEndpoint).replace("\$processDefinitionKey", processDefinitionKey)
         )
 
@@ -42,6 +44,14 @@ class JourneyGateway(
         )
 
         return sendRequest<TaskVariablesResponse>(request).body!!
+    }
+
+    fun complete(taskId: String) {
+        val request = requestBuilder.get(
+            uri = (baseUrl + completeTaskEndpoint.replace("\$taskId", taskId))
+        )
+
+        sendRequest<TaskVariablesResponse>(request).body!!
     }
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {

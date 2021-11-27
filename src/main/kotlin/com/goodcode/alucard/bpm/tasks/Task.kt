@@ -15,4 +15,6 @@ sealed class Task(
     }
 
     override fun getVariables(taskId: String) : TaskVariablesResponse = journeyGateway.getTaskVariables(taskId)
+
+    override fun complete(taskId: String)  = journeyGateway.complete(taskId)
 }

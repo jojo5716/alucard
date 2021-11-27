@@ -26,7 +26,9 @@ class ForcedTaskMessages(
     fun consume() {
         try {
             journeyGateway.getPendingTasks().forEach {
-                bpmDispatcher.dispatch(it)
+                if (!it.activityType.equals("startEvent")) {
+                    bpmDispatcher.dispatch(it)
+                }
             }
         } catch (ex: Exception) {
             println("ERROR getting process instances :$ex")

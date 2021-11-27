@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
 @Service
-class ValidateActionPermission(journeyGateway: JourneyGateway): Task(journeyGateway), ITask {
+class ValidateActionPermission(journeyGateway: JourneyGateway) : Task(journeyGateway), ITask {
     override fun handle(task: TaskResponse) {
         Logger.getGlobal().info("Starting ValidateActionPermission with id ${task.id}")
         val variables = getVariables(task.parentActivityInstanceId)

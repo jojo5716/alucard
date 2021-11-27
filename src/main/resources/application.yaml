@@ -48,8 +48,9 @@ bpm:
   pollingDelayMs: 15000
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
-    pendingTaskList: /history/activity-instance?maxResults=3&finished=false
+    pendingTaskList: /history/activity-instance?maxResults=3&finished=false&canceled=false
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
+    completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitionKeys:
     createModel: CreateModelProcess
 

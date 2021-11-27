@@ -7,5 +7,6 @@ data class TaskVariablesContentResponse(
 )
 
 data class TaskVariablesResponse(
-    val modelName: TaskVariablesContentResponse
+    val modelName: TaskVariablesContentResponse,
+    val action: TaskVariablesContentResponse
 )
