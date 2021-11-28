@@ -58,5 +58,5 @@ bpm:
     pendingTaskList: /external-task
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
-  processDefinitionKeys:
+  processDefinitions:
     createModel: CreateModelProcess

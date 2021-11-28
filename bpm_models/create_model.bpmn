@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0hjxvrp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0hjxvrp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="CreateModelProcess" name="Create model process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1ovbo72</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="ValidateActionPermissionTask" name="Validate action permissions" camunda:type="external" camunda:topic="validateActionPermission">
+    <bpmn:serviceTask id="ValidateActionPermissionTask" name="Validate action permissions" camunda:type="external" camunda:topic="validateActionPermissionTopic">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="modelName">${modelName}</camunda:inputParameter>
-          <camunda:inputParameter name="action">${action}</camunda:inputParameter>
           <camunda:outputParameter name="userHasPermissions">${userHasPermissions}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -17,40 +16,173 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1ovbo72" sourceRef="StartEvent_1" targetRef="ValidateActionPermissionTask" />
     <bpmn:endEvent id="Event_0ynqxun">
-      <bpmn:incoming>Flow_0hq6krr</bpmn:incoming>
+      <bpmn:incoming>Flow_0tf10jo</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1rnbn5l" sourceRef="ValidateActionPermissionTask" targetRef="CheckVariables" />
-    <bpmn:sequenceFlow id="Flow_0hq6krr" sourceRef="CheckVariables" targetRef="Event_0ynqxun" />
-    <bpmn:userTask id="CheckVariables" name="Check variables∫å">
+    <bpmn:sequenceFlow id="Flow_1rnbn5l" sourceRef="ValidateActionPermissionTask" targetRef="UserHasPermissionGateway" />
+    <bpmn:sequenceFlow id="Flow_0u6vg7u" sourceRef="CheckIfModelNameExistTask" targetRef="CheckIfModelNameExistGateway" />
+    <bpmn:serviceTask id="CheckIfModelNameExistTask" name="Check if model name exist" camunda:type="external" camunda:topic="checkIfModelNameExistTopic">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="message">${message}</camunda:outputParameter>
+          <camunda:outputParameter name="modelExist">${modelExist}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>UserHasPermissionGateway_Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u6vg7u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="CheckIfModelNameExistGateway" name="Model exist?">
+      <bpmn:incoming>Flow_0u6vg7u</bpmn:incoming>
+      <bpmn:outgoing>CheckIfModelNameExistGateway_No</bpmn:outgoing>
+      <bpmn:outgoing>CheckIfModelNameExistGateway_Yes</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="CheckIfModelNameExistGateway_No" name="No" sourceRef="CheckIfModelNameExistGateway" targetRef="CreateModelTask">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modelExist == "false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="CreateModelTask" name="Create model" camunda:type="external" camunda:topic="createModelTopic">
+      <bpmn:incoming>CheckIfModelNameExistGateway_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_13eq3bd</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0tf10jo" sourceRef="NotifyFrontEndTask" targetRef="Event_0ynqxun" />
+    <bpmn:serviceTask id="NotifyFrontEndTask" name="Notify front end" camunda:type="external" camunda:topic="cotifyFrontEndTopic">
+      <bpmn:incoming>Flow_13gloe6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tf10jo</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0freo6t">
+      <bpmn:incoming>CheckIfModelNameExistGateway_Yes</bpmn:incoming>
+      <bpmn:incoming>Flow_1nu0d7m</bpmn:incoming>
+      <bpmn:incoming>Flow_13eq3bd</bpmn:incoming>
+      <bpmn:outgoing>Flow_13gloe6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_13gloe6" sourceRef="Gateway_0freo6t" targetRef="NotifyFrontEndTask" />
+    <bpmn:sequenceFlow id="CheckIfModelNameExistGateway_Yes" name="Yes" sourceRef="CheckIfModelNameExistGateway" targetRef="Gateway_0freo6t">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modelExist == "true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="UserHasPermissionGateway" name="User has permissions?">
       <bpmn:incoming>Flow_1rnbn5l</bpmn:incoming>
-      <bpmn:outgoing>Flow_0hq6krr</bpmn:outgoing>
-    </bpmn:userTask>
+      <bpmn:outgoing>UserHasPermissionGateway_Yes</bpmn:outgoing>
+      <bpmn:outgoing>UserHasPermissionGateway_No</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="UserHasPermissionGateway_Yes" name="Yes" sourceRef="UserHasPermissionGateway" targetRef="CheckIfModelNameExistTask">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userHasPermissions == "true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:intermediateThrowEvent id="UserHasNotPermissionsEvent" name="User has not permissions">
+      <bpmn:incoming>UserHasPermissionGateway_No</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_1x7ttbd" name="" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="UserHasPermissionGateway_No" name="No" sourceRef="UserHasPermissionGateway" targetRef="UserHasNotPermissionsEvent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userHasPermissions == "false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:intermediateCatchEvent id="UserHasNotPermissionsReceiveEvent" name="Receive user has not permissions">
+      <bpmn:outgoing>Flow_1nu0d7m</bpmn:outgoing>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_081hcwv" name="" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1nu0d7m" sourceRef="UserHasNotPermissionsReceiveEvent" targetRef="Gateway_0freo6t" />
+    <bpmn:sequenceFlow id="Flow_13eq3bd" sourceRef="CreateModelTask" targetRef="Gateway_0freo6t" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CreateModelProcess">
-      <bpmndi:BPMNEdge id="Flow_0hq6krr_di" bpmnElement="Flow_0hq6krr">
-        <di:waypoint x="620" y="117" />
-        <di:waypoint x="822" y="117" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rnbn5l_di" bpmnElement="Flow_1rnbn5l">
-        <di:waypoint x="390" y="117" />
-        <di:waypoint x="520" y="117" />
+        <di:waypoint x="320" y="267" />
+        <di:waypoint x="365" y="267" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ovbo72_di" bpmnElement="Flow_1ovbo72">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="290" y="117" />
+        <di:waypoint x="188" y="267" />
+        <di:waypoint x="220" y="267" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u6vg7u_di" bpmnElement="Flow_0u6vg7u">
+        <di:waypoint x="580" y="267" />
+        <di:waypoint x="625" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0aiarin_di" bpmnElement="CheckIfModelNameExistGateway_No">
+        <di:waypoint x="675" y="267" />
+        <di:waypoint x="760" y="267" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="689" y="253" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tf10jo_di" bpmnElement="Flow_0tf10jo">
+        <di:waypoint x="1130" y="267" />
+        <di:waypoint x="1232" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13gloe6_di" bpmnElement="Flow_13gloe6">
+        <di:waypoint x="985" y="267" />
+        <di:waypoint x="1030" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0erkdza_di" bpmnElement="CheckIfModelNameExistGateway_Yes">
+        <di:waypoint x="650" y="292" />
+        <di:waypoint x="650" y="380" />
+        <di:waypoint x="960" y="380" />
+        <di:waypoint x="960" y="292" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="661" y="362" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ngzj2s_di" bpmnElement="UserHasPermissionGateway_Yes">
+        <di:waypoint x="415" y="267" />
+        <di:waypoint x="480" y="267" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="421" y="253" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wkxlji_di" bpmnElement="UserHasPermissionGateway_No">
+        <di:waypoint x="390" y="292" />
+        <di:waypoint x="390" y="402" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="398" y="344" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nu0d7m_di" bpmnElement="Flow_1nu0d7m">
+        <di:waypoint x="960" y="158" />
+        <di:waypoint x="960" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13eq3bd_di" bpmnElement="Flow_13eq3bd">
+        <di:waypoint x="860" y="267" />
+        <di:waypoint x="935" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0yy1tjs_di" bpmnElement="CheckIfModelNameExistTask">
+        <dc:Bounds x="480" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_17oexob_di" bpmnElement="CheckIfModelNameExistGateway" isMarkerVisible="true">
+        <dc:Bounds x="625" y="242" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="619" y="212" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <dc:Bounds x="152" y="249" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_07d48mk_di" bpmnElement="ValidateActionPermissionTask">
-        <dc:Bounds x="290" y="77" width="100" height="80" />
+        <dc:Bounds x="220" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1hnbyvr_di" bpmnElement="UserHasPermissionGateway" isMarkerVisible="true">
+        <dc:Bounds x="365" y="242" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="357" y="204.5" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18rg5wf_di" bpmnElement="UserHasNotPermissionsEvent">
+        <dc:Bounds x="372" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="359" y="445" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bpuyaj_di" bpmnElement="UserHasNotPermissionsReceiveEvent">
+        <dc:Bounds x="942" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="917" y="84.5" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hmzjy4_di" bpmnElement="CreateModelTask">
+        <dc:Bounds x="760" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0freo6t_di" bpmnElement="Gateway_0freo6t" isMarkerVisible="true">
+        <dc:Bounds x="935" y="242" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vgcn5o_di" bpmnElement="NotifyFrontEndTask">
+        <dc:Bounds x="1030" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1pbm6hk_di" bpmnElement="Event_0ynqxun">
-        <dc:Bounds x="822" y="99" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0a5tzk0_di" bpmnElement="CheckVariables">
-        <dc:Bounds x="520" y="77" width="100" height="80" />
+        <dc:Bounds x="1232" y="249" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -1,19 +1,14 @@
-package com.goodcode.alucard.modelBuilder.model.request
+package com.goodcode.alucard.bpm.requests
 
-data class RequestCreateModelVariablesSchema(
-    val action: RequestVariableSchema,
-    val modelName: RequestVariableSchema
-)
-
-data class RequestCreateModelSchema(
+data class BpmInstanceRequest(
     val businessKey: String,
-    val variables: RequestCreateModelVariablesSchema
+    val variables: Map<String, PayloadSchema>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as RequestCreateModelSchema
+        other as BpmInstanceRequest
 
         if (businessKey != other.businessKey) return false
 

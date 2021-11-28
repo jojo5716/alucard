@@ -1,6 +1,6 @@
 package com.goodcode.alucard.gateways
 
-import com.goodcode.alucard.modelBuilder.model.request.RequestCreateModelSchema
+import com.goodcode.alucard.bpm.requests.BpmInstanceRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
@@ -15,7 +15,7 @@ class JourneyGateway(
     @Value("\${bpm.baseUrl}") private val baseUrl: String,
     @Value("\${bpm.endpoints.startProcess}") private val startProcessEndpoint: String
 ) {
-    fun start(processDefinitionKey: String, body: RequestCreateModelSchema) {
+    fun start(processDefinitionKey: String, body: BpmInstanceRequest) {
         val request = requestBuilder.post(
             body = body,
             uri = (baseUrl + startProcessEndpoint).replace("\$processDefinitionKey", processDefinitionKey)
@@ -26,7 +26,7 @@ class JourneyGateway(
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {
         try {
-            Logger.getGlobal().severe("Sending request: $request")
+            Logger.getGlobal().info("Sending request: $request")
             return restTemplate.exchange(request, T::class.java)
         } catch (ex: Exception) {
             Logger.getGlobal().severe("Request to Journey failed: ${ex.message}")

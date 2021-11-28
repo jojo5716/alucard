@@ -17,7 +17,7 @@ class CamundaConfiguration(
     fun customClient(): ExternalTaskClient {
         return ExternalTaskClient.create()
             .baseUrl(baseUrl)
-            .workerId(workerId)
+//            .workerId(workerId)
             .maxTasks(maxTasks)
             .lockDuration(lockDuration)
             .build()
