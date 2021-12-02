@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.6.0"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-//	id("com.github.davidmc24.gradle.plugin.avro") version "1.1.0"
+	id("org.flywaydb.flyway") version "6.0.7"
 
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.spring") version "1.6.0"
@@ -15,10 +15,8 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 val jacksonVersion = "2.9.6"
 
-//avro {
-//	fieldVisibility.set("PRIVATE")
-//	stringType.set("CharSequence")
-//}
+apply(plugin = "org.flywaydb.flyway")
+
 
 repositories {
 	mavenCentral()
@@ -34,6 +32,7 @@ dependencies {
 	implementation("org.postgresql:postgresql")
 	implementation("org.apache.httpcomponents:httpclient:4.5.12")
 	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-external-task-client:7.16.0")
+	implementation("org.flywaydb:flyway-core")
 
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

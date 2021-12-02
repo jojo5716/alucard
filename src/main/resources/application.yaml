@@ -5,6 +5,7 @@ spring:
     url: "jdbc:postgresql://localhost:5432/alucard?user=postgres"
     driver-class-name: org.postgresql.Driver
   flyway:
+    enabled: true
     locations: filesystem:./db/migration
 
 jpa:
