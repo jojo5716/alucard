@@ -8,9 +8,9 @@ import java.util.logging.Logger
 @Service
 class ActionDispatcher(
     private val createModelTemplate: CreateModelTemplate
-): IActionDispatcher {
+) : IActionDispatcher {
     override fun dispatch(action: String, body: BpmInstanceRequest) {
-        when(action){
+        when (action) {
             Actions.CREATE_MODEL.actionName -> createModelTemplate.start(body)
             else -> Logger.getGlobal().severe("Action invalid")
         }

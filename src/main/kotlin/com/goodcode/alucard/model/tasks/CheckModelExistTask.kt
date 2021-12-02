@@ -1,6 +1,6 @@
-package com.goodcode.alucard.bpm.tasks
+package com.goodcode.alucard.model.tasks
 
-import org.camunda.bpm.client.impl.EngineClientException
+import com.goodcode.alucard.model.repositories.ModelRepository
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
 import org.camunda.bpm.client.task.ExternalTask
 import org.camunda.bpm.client.task.ExternalTaskHandler
@@ -11,18 +11,22 @@ import java.util.logging.Logger
 
 
 @Component
-@ExternalTaskSubscription(topicName = "validateActionPermissionTopic", autoOpen = true)
-class ValidateActionPermission : ExternalTaskHandler {
+@ExternalTaskSubscription(topicName = "checkIfModelNameExistTopic", autoOpen = true)
+class CheckModelExistTask(
+    private val modelRepository: ModelRepository
+) : ExternalTaskHandler {
     override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
         Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
-        val variables = Variables.createVariables()
-        variables["userHasPermissions"] = true
-
         try {
+            val modelName = externalTask.getVariable<String>("modelName")
+            val variables = Variables.createVariables()
+
+            variables["message"] = ""
+            variables["modelExist"] = modelRepository.existsByName(modelName)
+
             externalTaskService.complete(externalTask, variables)
         } catch (ex: Exception){
-            Logger.getGlobal().severe("Error finishing task: $ex")
-
+            Logger.getGlobal().severe("Error finishing task $externalTask: $ex")
         }
     }
 }
