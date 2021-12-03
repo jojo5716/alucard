@@ -1,4 +1,4 @@
-package com.goodcode.alucard.model.workflows
+package com.goodcode.alucard.model.tasks
 
 import com.goodcode.alucard.model.repositories.ModelRepository
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
