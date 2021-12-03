@@ -15,6 +15,8 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 val jacksonVersion = "2.9.6"
 val camundaVersion = "7.13.0"
+val springVersion = "2.2.5.RELEASE"
+
 apply(plugin = "org.flywaydb.flyway")
 
 
@@ -37,7 +39,11 @@ dependencies {
 	implementation("org.camunda.bpm.dmn:camunda-engine-dmn:$camundaVersion")
 
 	runtimeOnly("org.postgresql:postgresql")
-	testImplementation("org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE")
+	testImplementation("org.springframework.boot:spring-boot-starter-test:$springVersion") {
+		exclude(module = "mockito-core")
+		exclude(group = "org.junit.jupiter")
+		exclude(group = "org.junit.vintage")
+	}
 	testImplementation("org.camunda.bpm.extension:camunda-bpm-junit5:1.0.0")
 	testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 	testImplementation("junit:junit:4.13.2")
