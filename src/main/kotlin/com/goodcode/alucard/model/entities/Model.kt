@@ -1,5 +1,6 @@
 package com.goodcode.alucard.model.entities
 
+import com.goodcode.alucard.entities.BaseEntity
 import java.util.*
 import javax.persistence.*
 
@@ -12,4 +13,4 @@ data class Model(
 
     @Column(name = "name")
     val name: String
-)
+) : BaseEntity()
