@@ -66,3 +66,7 @@ kafka:
   bootstrap-address: localhost:9092
   group-id: alucard-group-id
   trusted-packages: com.goodcode.alucard
+  topics:
+    validateActionPermission: validateActionPermissionTopic
+    checkIfModelNameExist: checkIfModelNameExistTopic
+    createModel: createModelTopic

@@ -19,9 +19,4 @@ class KafkaTopicConfiguration {
 
         return KafkaAdmin(configs)
     }
-
-    @Bean
-    fun serviceTaskMessageTopic(): NewTopic {
-        return NewTopic("service-task-message-topic", 1, 1.toShort())
-    }
 }

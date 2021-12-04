@@ -42,6 +42,7 @@ class KafkaConsumerConfiguration {
         val factory: ConcurrentKafkaListenerContainerFactory<String, ActionRequest> =
             ConcurrentKafkaListenerContainerFactory()
         factory.setConsumerFactory(consumerFactory())
+
         return factory
     }
 }
