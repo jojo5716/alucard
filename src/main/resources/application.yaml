@@ -61,3 +61,8 @@ bpm:
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitions:
     createModel: CreateModelProcess
+
+kafka:
+  bootstrap-address: localhost:9092
+  group-id: alucard-group-id
+  trusted-packages: com.goodcode.alucard

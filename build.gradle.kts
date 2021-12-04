@@ -16,6 +16,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 val jacksonVersion = "2.9.6"
 val camundaVersion = "7.13.0"
 val springVersion = "2.2.5.RELEASE"
+val kafkaVersion = "2.8.0"
 
 apply(plugin = "org.flywaydb.flyway")
 
@@ -37,6 +38,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.camunda.bpm:camunda-engine:$camundaVersion")
 	implementation("org.camunda.bpm.dmn:camunda-engine-dmn:$camundaVersion")
+	implementation("org.springframework.kafka:spring-kafka:$kafkaVersion")
 
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:$springVersion") {
