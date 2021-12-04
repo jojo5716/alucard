@@ -9,10 +9,10 @@ import java.util.logging.Logger
 
 abstract class BaseTask(private val validateActionPermission: String) : ExternalTaskHandler, IBaseTask {
     @Bean
-    fun serviceTaskMessageTopic(): NewTopic {
+    override fun serviceTaskMessageTopic(): NewTopic {
         return NewTopic(validateActionPermission, 1, 1.toShort())
     }
-    
+
     override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
         Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
     }
