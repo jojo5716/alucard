@@ -9,4 +9,16 @@ abstract class BaseTask : ExternalTaskHandler, IBaseTask {
     override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
         Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
     }
+
+    override fun complete(
+        externalTask: ExternalTask,
+        variables: MutableMap<String, Any>,
+        externalTaskService: ExternalTaskService
+    ) {
+        Logger.getGlobal().info("Completing task: $externalTask with variables: $variables")
+        if (variables.get("message") == null) {
+            variables["message"] = ""
+        }
+        externalTaskService.complete(externalTask, variables)
+    }
 }

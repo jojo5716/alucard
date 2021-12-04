@@ -17,7 +17,7 @@ class ValidateActionPermission : BaseTask(), IBaseTask {
         variables["userHasPermissions"] = true
 
         try {
-            externalTaskService.complete(externalTask, variables)
+            complete(externalTask, variables, externalTaskService)
         } catch (ex: Exception){
             Logger.getGlobal().severe("Error finishing task: $ex")
         }
