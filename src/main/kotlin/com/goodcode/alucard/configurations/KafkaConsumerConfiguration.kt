@@ -1,8 +1,8 @@
 package com.goodcode.alucard.configurations
 
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer
-import com.goodcode.alucard.bpm.requests.ActionRequest
+import com.goodcode.alucard.bpm.requests.BpmInstanceRequest
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,7 +26,7 @@ class KafkaConsumerConfiguration {
     private val trustedPackage: String? = null
 
     @Bean
-    fun consumerFactory(): ConsumerFactory<String, ActionRequest> {
+    fun consumerFactory(): ConsumerFactory<String, BpmInstanceRequest> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
@@ -38,10 +38,10 @@ class KafkaConsumerConfiguration {
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, ActionRequest> {
-        val factory: ConcurrentKafkaListenerContainerFactory<String, ActionRequest> =
+    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, BpmInstanceRequest> {
+        val factory: ConcurrentKafkaListenerContainerFactory<String, BpmInstanceRequest> =
             ConcurrentKafkaListenerContainerFactory()
-        factory.setConsumerFactory(consumerFactory())
+        factory.consumerFactory = consumerFactory()
 
         return factory
     }

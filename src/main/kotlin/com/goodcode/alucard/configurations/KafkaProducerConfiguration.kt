@@ -1,6 +1,6 @@
 package com.goodcode.alucard.configurations
 
-import com.goodcode.alucard.bpm.requests.ActionRequest
+import com.goodcode.alucard.bpm.requests.BpmInstanceRequest
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -22,7 +22,7 @@ class KafkaProducerConfiguration {
     private val trustedPackage: String? = null
 
     @Bean
-    fun producerFactory(): ProducerFactory<String, ActionRequest> {
+    fun producerFactory(): ProducerFactory<String, BpmInstanceRequest> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
@@ -33,7 +33,7 @@ class KafkaProducerConfiguration {
     }
 
     @Bean
-    fun kafkaTemplate(): KafkaTemplate<String, ActionRequest> {
+    fun kafkaTemplate(): KafkaTemplate<String, BpmInstanceRequest> {
         return KafkaTemplate(producerFactory())
     }
 }

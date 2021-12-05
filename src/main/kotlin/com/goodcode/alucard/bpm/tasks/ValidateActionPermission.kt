@@ -10,7 +10,7 @@ import java.util.logging.Logger
 
 
 @Component
-@ExternalTaskSubscription(topicName = "validateActionPermissionTopic", autoOpen = true)
+//@ExternalTaskSubscription(topicName = "validateActionPermissionTopic", autoOpen = true)
 class ValidateActionPermission(
     @Value("\${kafka.topics.validateActionPermission}") private val validateActionPermission: String
 ) : BaseTask(validateActionPermission), IBaseTask {

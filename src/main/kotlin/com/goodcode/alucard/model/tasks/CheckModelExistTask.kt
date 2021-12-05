@@ -13,7 +13,7 @@ import java.util.logging.Logger
 
 
 @Component
-@ExternalTaskSubscription(topicName = "checkIfModelNameExistTopic", autoOpen = true)
+//@ExternalTaskSubscription(topicName = "checkIfModelNameExistTopic", autoOpen = true)
 class CheckModelExistTask(
     private val modelRepository: ModelRepository,
     @Value("\${kafka.topics.checkIfModelNameExist}") private val checkIfModelNameExist: String

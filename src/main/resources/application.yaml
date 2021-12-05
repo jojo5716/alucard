@@ -52,11 +52,12 @@ bpm:
   baseUrl: http://localhost:8080/engine-rest
   pollingDelayMs: 5000
   maxTasks: 10
+  usePriority: true
   lockDuration: 10000
   workerId: worker_service_task
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
-    pendingTaskList: /external-task
+    fetchAndLock: /external-task/fetchAndLock
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitions:
@@ -65,8 +66,10 @@ bpm:
 kafka:
   bootstrap-address: localhost:9092
   group-id: alucard-group-id
-  trusted-packages: com.goodcode.alucard
+  trusted-packages: com.goodcode.alucard.*
   topics:
+    startAction: startActionTopic
     validateActionPermission: validateActionPermissionTopic
     checkIfModelNameExist: checkIfModelNameExistTopic
     createModel: createModelTopic
+    startCreateModelInstance: CREATE_MODEL
