@@ -58,6 +58,7 @@ bpm:
   endpoints:
     startProcess: /process-definition/key/$processDefinitionKey/start
     fetchAndLock: /external-task/fetchAndLock
+    fetchTopicNames: /external-task/topic-names?withLockedTasks=false&withUnlockedTasks=true
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
     completeTask: /process-instance/$taskId/variables?deserializeValues=true
   processDefinitions:
@@ -73,4 +74,5 @@ kafka:
     validateActionPermission: validateActionPermissionTopic
     checkIfModelNameExist: checkIfModelNameExistTopic
     createModel: createModelTopic
+
     startCreateModelInstance: CREATE_MODEL
