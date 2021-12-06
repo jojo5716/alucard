@@ -69,6 +69,7 @@ kafka:
   trusted-packages: com.goodcode.alucard.*
   topics:
     startAction: startActionTopic
+    fetchTasks: fetchTasksTopic
     validateActionPermission: validateActionPermissionTopic
     checkIfModelNameExist: checkIfModelNameExistTopic
     createModel: createModelTopic
