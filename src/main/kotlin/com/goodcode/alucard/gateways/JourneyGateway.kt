@@ -1,10 +1,7 @@
 package com.goodcode.alucard.gateways
 
-import com.goodcode.alucard.bpm.requests.BpmInstanceRequest
-import com.goodcode.alucard.bpm.requests.FetchAndLockRequest
-import com.goodcode.alucard.bpm.requests.Topic
+import com.goodcode.alucard.bpm.requests.*
 import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
-import org.camunda.bpm.client.task.ExternalTask
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
@@ -23,6 +20,7 @@ class JourneyGateway(
     @Value("\${bpm.lockDuration}") private val lockDuration: Long,
     @Value("\${bpm.endpoints.startProcess}") private val startProcessEndpoint: String,
     @Value("\${bpm.endpoints.fetchAndLock}") private val fetchAndLockEndpoint: String,
+    @Value("\${bpm.endpoints.completeTask}") private val completeTaskEndpoint: String,
     @Value("\${bpm.endpoints.fetchTopicNames}") private val fetchTopicNamesEndpoint: String
 ) {
     fun start(processDefinitionKey: String, body: BpmInstanceRequest) {
@@ -35,10 +33,12 @@ class JourneyGateway(
     }
 
     fun fetchAndLock(topicNames: Array<String>): Array<FetchAndLockResponse>? {
-        val topicNamesList = topicNames.map { Topic(
-            topicName = it,
-            lockDuration = lockDuration
-        ) }
+        val topicNamesList = topicNames.map {
+            Topic(
+                topicName = it,
+                lockDuration = lockDuration
+            )
+        }
 
         val request = requestBuilder.post(
             body = FetchAndLockRequest(
@@ -59,6 +59,15 @@ class JourneyGateway(
         )
 
         return sendRequest<Array<String>>(request).body
+    }
+
+    fun complete(taskId: String, variables: Map<String, PayloadSchema>) {
+        val request = requestBuilder.post(
+            body = CompleteTaskRequest(workerId = workerId, variables = variables),
+            uri = (baseUrl + completeTaskEndpoint).replace("\$taskId", taskId)
+        )
+
+        sendRequest<Unit>(request)
     }
 
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {

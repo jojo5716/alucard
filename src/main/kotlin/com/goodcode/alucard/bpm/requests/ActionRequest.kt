@@ -1,7 +1,7 @@
 package com.goodcode.alucard.bpm.requests
 
 data class PayloadSchema(
-    val value: String,
+    val value: Any,
     val type: String
 )
 

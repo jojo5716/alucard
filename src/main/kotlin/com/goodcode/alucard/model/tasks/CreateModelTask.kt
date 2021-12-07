@@ -3,6 +3,7 @@ package com.goodcode.alucard.model.tasks
 import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import com.goodcode.alucard.bpm.tasks.BaseTask
 import com.goodcode.alucard.bpm.tasks.IBaseTask
+import com.goodcode.alucard.gateways.JourneyGateway
 import com.goodcode.alucard.model.presenters.ModelPresenter
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
 import org.camunda.bpm.client.task.ExternalTask
@@ -16,9 +17,10 @@ import java.util.logging.Logger
 @Component
 @ExternalTaskSubscription(topicName = "createModelTopic", autoOpen = true)
 class CreateModelTask(
+    journeyGateway: JourneyGateway,
     private val modelPresenter: ModelPresenter,
     @Value("\${kafka.topics.createModel}") private val createModel: String
-) : BaseTask(createModel), IBaseTask {
+) : BaseTask(createModel, journeyGateway), IBaseTask {
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
 //        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
 //        try {

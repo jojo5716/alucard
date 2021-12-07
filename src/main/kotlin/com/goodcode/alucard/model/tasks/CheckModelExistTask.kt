@@ -3,6 +3,7 @@ package com.goodcode.alucard.model.tasks
 import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import com.goodcode.alucard.bpm.tasks.BaseTask
 import com.goodcode.alucard.bpm.tasks.IBaseTask
+import com.goodcode.alucard.gateways.JourneyGateway
 import com.goodcode.alucard.model.repositories.ModelRepository
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
 import org.camunda.bpm.client.task.ExternalTask
@@ -17,8 +18,9 @@ import java.util.logging.Logger
 //@ExternalTaskSubscription(topicName = "checkIfModelNameExistTopic", autoOpen = true)
 class CheckModelExistTask(
     private val modelRepository: ModelRepository,
-    @Value("\${kafka.topics.checkIfModelNameExist}") private val checkIfModelNameExist: String
-) : BaseTask(checkIfModelNameExist), IBaseTask {
+    journeyGateway: JourneyGateway,
+    @Value("\${kafka.topics.checkIfModelNameExist}") private val checkIfModelNameExist: String,
+) : BaseTask(checkIfModelNameExist, journeyGateway), IBaseTask {
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
         // Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
 //        try {

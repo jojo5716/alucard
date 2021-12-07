@@ -60,7 +60,7 @@ bpm:
     fetchAndLock: /external-task/fetchAndLock
     fetchTopicNames: /external-task/topic-names?withLockedTasks=false&withUnlockedTasks=true
     taskVariables: /process-instance/$taskId/variables?deserializeValues=true
-    completeTask: /process-instance/$taskId/variables?deserializeValues=true
+    completeTask: /external-task/$taskId/complete
   processDefinitions:
     createModel: CreateModelProcess
 
