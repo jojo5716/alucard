@@ -5,6 +5,7 @@ import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import com.goodcode.alucard.gateways.JourneyGateway
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 
@@ -12,8 +13,10 @@ import java.util.logging.Logger
 @Component
 class ValidateActionPermission(
     journeyGateway: JourneyGateway,
+    kafkaTemplate: KafkaTemplate<String, Any>,
     @Value("\${kafka.topics.validateActionPermission}") private val validateActionPermission: String,
-) : BaseTask(validateActionPermission, journeyGateway), IBaseTask {
+    @Value("\${kafka.topics.fetchTasks}") private val fetchTasksTopic: String
+) : BaseTask(validateActionPermission, journeyGateway, kafkaTemplate, fetchTasksTopic), IBaseTask {
 
     @KafkaListener(topics = ["\${kafka.topics.validateActionPermission}"], groupId = "\${kafka.group-id}")
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {

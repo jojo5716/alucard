@@ -10,6 +10,7 @@ import org.camunda.bpm.client.task.ExternalTask
 import org.camunda.bpm.client.task.ExternalTaskService
 import org.camunda.bpm.engine.variable.Variables
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 
@@ -19,8 +20,10 @@ import java.util.logging.Logger
 class CreateModelTask(
     journeyGateway: JourneyGateway,
     private val modelPresenter: ModelPresenter,
-    @Value("\${kafka.topics.createModel}") private val createModel: String
-) : BaseTask(createModel, journeyGateway), IBaseTask {
+    kafkaTemplate: KafkaTemplate<String, Any>,
+    @Value("\${kafka.topics.createModel}") private val createModel: String,
+    @Value("\${kafka.topics.fetchTasks}") private val fetchTasksTopic: String
+) : BaseTask(createModel, journeyGateway, kafkaTemplate, fetchTasksTopic), IBaseTask {
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
 //        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
 //        try {
