@@ -32,25 +32,29 @@ class JourneyGateway(
         sendRequest<Unit>(request)
     }
 
-    fun fetchAndLock(topicNames: Array<String>): Array<FetchAndLockResponse>? {
-        val topicNamesList = topicNames.map {
-            Topic(
-                topicName = it,
-                lockDuration = lockDuration
+    fun fetchAndLock(): Array<FetchAndLockResponse>? {
+        val topicNames = fetchTopicNames()
+        if (topicNames != null && topicNames.isNotEmpty()) {
+            val topicNamesList = topicNames.map {
+                Topic(
+                    topicName = it,
+                    lockDuration = lockDuration
+                )
+            }
+            val request = requestBuilder.post(
+                body = FetchAndLockRequest(
+                    workerId = workerId,
+                    maxTasks = maxTasks,
+                    usePriority = usePriority,
+                    topics = topicNamesList
+                ),
+                uri = (baseUrl + fetchAndLockEndpoint)
             )
+
+            return sendRequest<Array<FetchAndLockResponse>>(request).body
+        } else {
+            return emptyArray()
         }
-
-        val request = requestBuilder.post(
-            body = FetchAndLockRequest(
-                workerId = workerId,
-                maxTasks = maxTasks,
-                usePriority = usePriority,
-                topics = topicNamesList
-            ),
-            uri = (baseUrl + fetchAndLockEndpoint)
-        )
-
-        return sendRequest<Array<FetchAndLockResponse>>(request).body
     }
 
     fun fetchTopicNames(): Array<String>? {
@@ -58,7 +62,13 @@ class JourneyGateway(
             uri = (baseUrl + fetchTopicNamesEndpoint)
         )
 
-        return sendRequest<Array<String>>(request).body
+        return try {
+            sendRequest<Array<String>>(request).body
+        } catch (ex: Exception) {
+            Logger.getGlobal().severe("Error fetching topics: $ex")
+
+            emptyArray()
+        }
     }
 
     fun complete(taskId: String, variables: Map<String, PayloadSchema>) {

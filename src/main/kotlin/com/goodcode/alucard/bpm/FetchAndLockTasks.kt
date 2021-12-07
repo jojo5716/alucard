@@ -15,13 +15,19 @@ class FetchAndLockTasks(
     @KafkaListener(topics = ["\${kafka.topics.fetchTasks}"], groupId = "\${kafka.group-id}")
     fun fetchAndLock() {
         Logger.getGlobal().info("Fetching and locking tasks")
-        val topicNames = journeyGateway.fetchTopicNames()
-        if (topicNames != null && topicNames.isNotEmpty()) {
-            journeyGateway.fetchAndLock(topicNames)?.forEach {
-                Logger.getGlobal().info("Executing service task $it")
+        journeyGateway.fetchAndLock()?.forEach {
+            Logger.getGlobal().info("Executing service task $it")
 
-                kafkaTemplate.send(it.topicName, it)
-            }
+            kafkaTemplate.send(it.topicName, it)
         }
+
+//        val topicNames = journeyGateway.fetchTopicNames()
+//        if (topicNames != null && topicNames.isNotEmpty()) {
+//            journeyGateway.fetchAndLock(topicNames)?.forEach {
+//                Logger.getGlobal().info("Executing service task $it")
+//
+//                kafkaTemplate.send(it.topicName, it)
+//            }
+//        }
     }
 }

@@ -32,6 +32,7 @@ abstract class BaseTask(
         }
 
         journeyGateway.complete(fetchAndLockResponse.id, variables + messageVariable)
+        journeyGateway.fetchAndLock()
 
     }
 }
