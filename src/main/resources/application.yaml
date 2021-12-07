@@ -74,5 +74,6 @@ kafka:
     validateActionPermission: validateActionPermissionTopic
     checkIfModelNameExist: checkIfModelNameExistTopic
     createModel: createModelTopic
+    notifyFrontEnd: notifyFrontEndTopic
 
     startCreateModelInstance: CREATE_MODEL

@@ -16,7 +16,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1ovbo72" sourceRef="StartEvent_1" targetRef="ValidateActionPermissionTask" />
     <bpmn:endEvent id="Event_0ynqxun">
-      <bpmn:incoming>Flow_0tf10jo</bpmn:incoming>
+      <bpmn:incoming>Flow_1jbo9pj</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1rnbn5l" sourceRef="ValidateActionPermissionTask" targetRef="UserHasPermissionGateway" />
     <bpmn:sequenceFlow id="Flow_0u6vg7u" sourceRef="CheckIfModelNameExistTask" targetRef="CheckIfModelNameExistGateway" />
@@ -42,8 +42,13 @@
       <bpmn:incoming>CheckIfModelNameExistGateway_No</bpmn:incoming>
       <bpmn:outgoing>Flow_13eq3bd</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0tf10jo" sourceRef="NotifyFrontEndTask" targetRef="Event_0ynqxun" />
-    <bpmn:serviceTask id="NotifyFrontEndTask" name="Notify front end" camunda:type="external" camunda:topic="cotifyFrontEndTopic">
+    <bpmn:sequenceFlow id="Flow_0tf10jo" sourceRef="NotifyFrontEndTask" targetRef="Activity_050cwck" />
+    <bpmn:serviceTask id="NotifyFrontEndTask" name="Notify front end" camunda:type="external" camunda:topic="notifyFrontEndTopic">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="output_test">testValue</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_13gloe6</bpmn:incoming>
       <bpmn:outgoing>Flow_0tf10jo</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -78,35 +83,35 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1nu0d7m" sourceRef="UserHasNotPermissionsReceiveEvent" targetRef="Gateway_0freo6t" />
     <bpmn:sequenceFlow id="Flow_13eq3bd" sourceRef="CreateModelTask" targetRef="Gateway_0freo6t" />
+    <bpmn:sequenceFlow id="Flow_1jbo9pj" sourceRef="Activity_050cwck" targetRef="Event_0ynqxun" />
+    <bpmn:userTask id="Activity_050cwck" name="Manual check">
+      <bpmn:incoming>Flow_0tf10jo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jbo9pj</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CreateModelProcess">
-      <bpmndi:BPMNEdge id="Flow_1rnbn5l_di" bpmnElement="Flow_1rnbn5l">
-        <di:waypoint x="320" y="267" />
-        <di:waypoint x="365" y="267" />
+      <bpmndi:BPMNEdge id="Flow_13eq3bd_di" bpmnElement="Flow_13eq3bd">
+        <di:waypoint x="860" y="267" />
+        <di:waypoint x="935" y="267" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ovbo72_di" bpmnElement="Flow_1ovbo72">
-        <di:waypoint x="188" y="267" />
-        <di:waypoint x="220" y="267" />
+      <bpmndi:BPMNEdge id="Flow_1nu0d7m_di" bpmnElement="Flow_1nu0d7m">
+        <di:waypoint x="960" y="158" />
+        <di:waypoint x="960" y="242" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0u6vg7u_di" bpmnElement="Flow_0u6vg7u">
-        <di:waypoint x="580" y="267" />
-        <di:waypoint x="625" y="267" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0aiarin_di" bpmnElement="CheckIfModelNameExistGateway_No">
-        <di:waypoint x="675" y="267" />
-        <di:waypoint x="760" y="267" />
+      <bpmndi:BPMNEdge id="Flow_1wkxlji_di" bpmnElement="UserHasPermissionGateway_No">
+        <di:waypoint x="390" y="292" />
+        <di:waypoint x="390" y="402" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="689" y="253" width="15" height="14" />
+          <dc:Bounds x="398" y="344" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tf10jo_di" bpmnElement="Flow_0tf10jo">
-        <di:waypoint x="1130" y="267" />
-        <di:waypoint x="1232" y="267" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_13gloe6_di" bpmnElement="Flow_13gloe6">
-        <di:waypoint x="985" y="267" />
-        <di:waypoint x="1030" y="267" />
+      <bpmndi:BPMNEdge id="Flow_1ngzj2s_di" bpmnElement="UserHasPermissionGateway_Yes">
+        <di:waypoint x="415" y="267" />
+        <di:waypoint x="480" y="267" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="421" y="253" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0erkdza_di" bpmnElement="CheckIfModelNameExistGateway_Yes">
         <di:waypoint x="650" y="292" />
@@ -117,28 +122,43 @@
           <dc:Bounds x="661" y="362" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ngzj2s_di" bpmnElement="UserHasPermissionGateway_Yes">
-        <di:waypoint x="415" y="267" />
-        <di:waypoint x="480" y="267" />
+      <bpmndi:BPMNEdge id="Flow_13gloe6_di" bpmnElement="Flow_13gloe6">
+        <di:waypoint x="985" y="267" />
+        <di:waypoint x="1030" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tf10jo_di" bpmnElement="Flow_0tf10jo">
+        <di:waypoint x="1130" y="267" />
+        <di:waypoint x="1190" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0aiarin_di" bpmnElement="CheckIfModelNameExistGateway_No">
+        <di:waypoint x="675" y="267" />
+        <di:waypoint x="760" y="267" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="421" y="253" width="18" height="14" />
+          <dc:Bounds x="689" y="253" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wkxlji_di" bpmnElement="UserHasPermissionGateway_No">
-        <di:waypoint x="390" y="292" />
-        <di:waypoint x="390" y="402" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="398" y="344" width="15" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_0u6vg7u_di" bpmnElement="Flow_0u6vg7u">
+        <di:waypoint x="580" y="267" />
+        <di:waypoint x="625" y="267" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nu0d7m_di" bpmnElement="Flow_1nu0d7m">
-        <di:waypoint x="960" y="158" />
-        <di:waypoint x="960" y="242" />
+      <bpmndi:BPMNEdge id="Flow_1rnbn5l_di" bpmnElement="Flow_1rnbn5l">
+        <di:waypoint x="320" y="267" />
+        <di:waypoint x="365" y="267" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_13eq3bd_di" bpmnElement="Flow_13eq3bd">
-        <di:waypoint x="860" y="267" />
-        <di:waypoint x="935" y="267" />
+      <bpmndi:BPMNEdge id="Flow_1ovbo72_di" bpmnElement="Flow_1ovbo72">
+        <di:waypoint x="188" y="267" />
+        <di:waypoint x="220" y="267" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jbo9pj_di" bpmnElement="Flow_1jbo9pj">
+        <di:waypoint x="1290" y="267" />
+        <di:waypoint x="1342" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="249" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07d48mk_di" bpmnElement="ValidateActionPermissionTask">
+        <dc:Bounds x="220" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0yy1tjs_di" bpmnElement="CheckIfModelNameExistTask">
         <dc:Bounds x="480" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -148,11 +168,14 @@
           <dc:Bounds x="619" y="212" width="62" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="152" y="249" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_0hmzjy4_di" bpmnElement="CreateModelTask">
+        <dc:Bounds x="760" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_07d48mk_di" bpmnElement="ValidateActionPermissionTask">
-        <dc:Bounds x="220" y="227" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0vgcn5o_di" bpmnElement="NotifyFrontEndTask">
+        <dc:Bounds x="1030" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0freo6t_di" bpmnElement="Gateway_0freo6t" isMarkerVisible="true">
+        <dc:Bounds x="935" y="242" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1hnbyvr_di" bpmnElement="UserHasPermissionGateway" isMarkerVisible="true">
         <dc:Bounds x="365" y="242" width="50" height="50" />
@@ -172,17 +195,11 @@
           <dc:Bounds x="917" y="84.5" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0hmzjy4_di" bpmnElement="CreateModelTask">
-        <dc:Bounds x="760" y="227" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0freo6t_di" bpmnElement="Gateway_0freo6t" isMarkerVisible="true">
-        <dc:Bounds x="935" y="242" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vgcn5o_di" bpmnElement="NotifyFrontEndTask">
-        <dc:Bounds x="1030" y="227" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1pbm6hk_di" bpmnElement="Event_0ynqxun">
-        <dc:Bounds x="1232" y="249" width="36" height="36" />
+        <dc:Bounds x="1342" y="249" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nn8zln_di" bpmnElement="Activity_050cwck">
+        <dc:Bounds x="1190" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

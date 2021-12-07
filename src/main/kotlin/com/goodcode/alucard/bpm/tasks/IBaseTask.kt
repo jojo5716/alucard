@@ -8,7 +8,7 @@ interface IBaseTask {
     fun execute(fetchAndLockResponse: FetchAndLockResponse)
     fun complete(
         fetchAndLockResponse: FetchAndLockResponse,
-        variables: Map<String, PayloadSchema>
+        variables: Map<String, PayloadSchema>?
     )
     fun serviceTaskMessageTopic(): NewTopic
 }

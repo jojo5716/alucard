@@ -29,16 +29,16 @@ abstract class BaseTask(
 
     override fun complete(
         fetchAndLockResponse: FetchAndLockResponse,
-        variables: Map<String, PayloadSchema>
+        variables: Map<String, PayloadSchema>?
     ) {
         Logger.getGlobal().info("Completing task: $fetchAndLockResponse with variables: $variables")
         var messageVariable = mapOf<String, PayloadSchema>()
 
-        if (variables.get("message") == null) {
+        if (variables?.get("message") == null) {
             messageVariable = mapOf("message" to PayloadSchema(value = "", type = "String"))
         }
 
-        journeyGateway.complete(fetchAndLockResponse.id, variables + messageVariable)
+        journeyGateway.complete(fetchAndLockResponse.id, variables?.plus(messageVariable) ?: messageVariable)
         kafkaTemplate.send(fetchTasksTopic, null)
     }
 }
