@@ -1,18 +1,5 @@
 package com.goodcode.alucard.bpm.responses
 
-//{
-//    "variables": {
-//    "modelName": {
-//    "type": "String",
-//    "value": "Product",
-//    "valueInfo": {}
-//}
-//},
-//    "priority": 0,
-//    "businessKey": "507f16a4-4352-4fcc-a210-33b1c35e78e2",
-//    "extensionProperties": {}
-//},
-
 data class FetchAndLockVariables(
     val type: String,
     val value: String,

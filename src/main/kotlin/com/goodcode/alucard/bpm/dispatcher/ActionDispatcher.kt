@@ -7,7 +7,7 @@ import java.util.logging.Logger
 
 @Service
 class ActionDispatcher(
-    private val kafkaTemplate: KafkaTemplate<String, BpmInstanceRequest>
+    private val kafkaTemplate: KafkaTemplate<String, Any>
 ) : IActionDispatcher {
     override fun dispatch(action: String, body: BpmInstanceRequest) {
         when (action) {

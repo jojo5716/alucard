@@ -26,7 +26,7 @@ class KafkaConsumerConfiguration {
     private val trustedPackage: String? = null
 
     @Bean
-    fun consumerFactory(): ConsumerFactory<String, BpmInstanceRequest> {
+    fun consumerFactory(): ConsumerFactory<String, Any> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
@@ -38,8 +38,8 @@ class KafkaConsumerConfiguration {
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, BpmInstanceRequest> {
-        val factory: ConcurrentKafkaListenerContainerFactory<String, BpmInstanceRequest> =
+    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, Any> {
+        val factory: ConcurrentKafkaListenerContainerFactory<String, Any> =
             ConcurrentKafkaListenerContainerFactory()
         factory.consumerFactory = consumerFactory()
 

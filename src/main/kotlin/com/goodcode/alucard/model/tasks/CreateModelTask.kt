@@ -1,5 +1,6 @@
 package com.goodcode.alucard.model.tasks
 
+import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import com.goodcode.alucard.bpm.tasks.BaseTask
 import com.goodcode.alucard.bpm.tasks.IBaseTask
 import com.goodcode.alucard.model.presenters.ModelPresenter
@@ -18,18 +19,18 @@ class CreateModelTask(
     private val modelPresenter: ModelPresenter,
     @Value("\${kafka.topics.createModel}") private val createModel: String
 ) : BaseTask(createModel), IBaseTask {
-    override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
-        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
-        try {
-            val modelCreated = modelPresenter.create(externalTask.allVariables)
-            val variables = Variables.createVariables()
-
-            variables["modelId"] = modelCreated.id.toString()
-
-            complete(externalTask, variables, externalTaskService)
-        } catch (ex: Exception) {
-            Logger.getGlobal().severe("Error finishing task $externalTask: $ex")
-        }
+    override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
+//        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
+//        try {
+//            val modelCreated = modelPresenter.create(externalTask.allVariables)
+//            val variables = Variables.createVariables()
+//
+//            variables["modelId"] = modelCreated.id.toString()
+//
+//            complete(externalTask, variables, externalTaskService)
+//        } catch (ex: Exception) {
+//            Logger.getGlobal().severe("Error finishing task $externalTask: $ex")
+//        }
     }
 }
 

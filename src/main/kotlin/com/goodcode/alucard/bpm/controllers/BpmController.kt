@@ -3,10 +3,9 @@ package com.goodcode.alucard.bpm.controllers
 import com.goodcode.alucard.bpm.dispatcher.ActionDispatcher
 import com.goodcode.alucard.bpm.requests.ActionRequest
 import com.goodcode.alucard.bpm.requests.BpmInstanceRequest
-import org.springframework.beans.factory.annotation.Value
+import com.goodcode.alucard.bpm.requests.PayloadSchema
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,7 +19,11 @@ class BpmController(
 ) {
     @PostMapping("")
     fun registerAction(@RequestBody body: ActionRequest): ResponseEntity<Boolean> {
-        val bpmInstanceData = BpmInstanceRequest(businessKey=UUID.randomUUID().toString(), variables = body.payload)
+        val variables = mapOf("action" to PayloadSchema(value = body.action, type = "String"))
+        val bpmInstanceData = BpmInstanceRequest(
+            businessKey = UUID.randomUUID().toString(),
+            variables = variables + body.payload
+        )
 
         actionDispatcher.dispatch(body.action, bpmInstanceData)
 

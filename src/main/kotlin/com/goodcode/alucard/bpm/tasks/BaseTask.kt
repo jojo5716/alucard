@@ -1,5 +1,6 @@
 package com.goodcode.alucard.bpm.tasks
 
+import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import org.apache.kafka.clients.admin.NewTopic
 import org.camunda.bpm.client.task.ExternalTask
 import org.camunda.bpm.client.task.ExternalTaskHandler
@@ -7,14 +8,14 @@ import org.camunda.bpm.client.task.ExternalTaskService
 import org.springframework.context.annotation.Bean
 import java.util.logging.Logger
 
-abstract class BaseTask(private val validateActionPermission: String) : ExternalTaskHandler, IBaseTask {
+abstract class BaseTask(private val validateActionPermission: String) :  IBaseTask {
     @Bean
     override fun serviceTaskMessageTopic(): NewTopic {
         return NewTopic(validateActionPermission, 1, 1.toShort())
     }
 
-    override fun execute(externalTask: ExternalTask, externalTaskService: ExternalTaskService) {
-        Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
+    override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
+        // Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
     }
 
     override fun complete(
