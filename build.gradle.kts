@@ -39,6 +39,8 @@ dependencies {
 	implementation("org.camunda.bpm:camunda-engine:$camundaVersion")
 	implementation("org.camunda.bpm.dmn:camunda-engine-dmn:$camundaVersion")
 	implementation("org.springframework.kafka:spring-kafka:$kafkaVersion")
+	implementation("javax.activation:activation:1.1.1")
+	implementation("javax.cache:cache-api:1.1.1")
 
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:$springVersion") {
