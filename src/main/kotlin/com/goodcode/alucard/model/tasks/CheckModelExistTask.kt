@@ -38,37 +38,3 @@ class CheckModelExistTask(
         }
     }
 }
-
-//@Component
-////@ExternalTaskSubscription(topicName = "checkIfModelNameExistTopic", autoOpen = true)
-//class CheckModelExistTask(
-//    private val modelRepository: ModelRepository,
-//    journeyGateway: JourneyGateway,
-//    @Value("\${kafka.topics.checkIfModelNameExist}") private val checkIfModelNameExist: String,
-//) : BaseTask(checkIfModelNameExist, journeyGateway), IBaseTask {
-//
-//    @KafkaListener(topics = ["\${kafka.topics.checkIfModelNameExist}"], groupId = "\${kafka.group-id}")
-//    override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
-//        super.execute(fetchAndLockResponse)
-//        val variables = mapOf("modelExist" to PayloadSchema(value = true, type = "Boolean"))
-//
-//        try {
-//            complete(fetchAndLockResponse, variables)
-//        } catch (ex: Exception) {
-//            Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
-//        }
-//
-//        // Logger.getGlobal().info("Executing external task: $externalTask by external task service: $externalTaskService")
-////        try {
-////            val modelName = externalTask.getVariable<String>("modelName")
-////            val variables = Variables.createVariables()
-////
-////            variables["modelExist"] = modelRepository.existsByName(modelName)
-////
-////            complete(externalTask, variables, externalTaskService)
-////        } catch (ex: Exception){
-////            Logger.getGlobal().severe("Error finishing task $externalTask: $ex")
-////        }
-//    }
-//}
-//
