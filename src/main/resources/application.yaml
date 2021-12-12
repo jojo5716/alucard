@@ -7,16 +7,20 @@ spring:
   flyway:
     enabled: true
     locations: filesystem:./db/migration
-
-jpa:
-  database-platform: org.hibernate.dialect.PostgreSQLDialect
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-      enable_lazy_load_no_trans: true
-      jdbc:
-        lob:
-          non_contextual_creation: true
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        enable_lazy_load_no_trans: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 servlet:
   multipart:

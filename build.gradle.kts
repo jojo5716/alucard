@@ -42,6 +42,7 @@ dependencies {
 	implementation("javax.activation:activation:1.1.1")
 	implementation("javax.cache:cache-api:1.1.1")
 
+	runtimeOnly("com.h2database:runtime")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:$springVersion") {
 		exclude(module = "mockito-core")

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 import javax.persistence.*
 
-@Component
+//@Component
 class InputField(
     @Id
     @GeneratedValue
