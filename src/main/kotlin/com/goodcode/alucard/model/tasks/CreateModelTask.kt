@@ -32,8 +32,6 @@ class CreateModelTask(
         super.execute(fetchAndLockResponse)
 
         try {
-            throw Exception("Manual error")
-
             val jsonParser = JsonParser()
             val fieldsParsed = jsonParser.parse(fetchAndLockResponse.variables.get("fields")?.value)
             val modelCreated = modelPresenter.create(fetchAndLockResponse.variables)

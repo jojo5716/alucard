@@ -48,5 +48,4 @@ abstract class BaseTask(
         journeyGateway.error(fetchAndLockResponse.id, variables!!)
         kafkaTemplate.send(fetchTasksTopic, null)
     }
-
 }
