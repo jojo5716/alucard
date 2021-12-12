@@ -80,6 +80,20 @@ class JourneyGateway(
         sendRequest<Unit>(request)
     }
 
+    fun error(taskId: String, variables: Map<String, PayloadSchema>) {
+        val request = requestBuilder.post(
+            body = ErrorTaskRequest(
+                workerId = workerId,
+                variables = variables + mapOf("error" to PayloadSchema(value = true, type = "Boolean")),
+                errorCode = "task_error",
+                errorMessage = "error lol"
+            ),
+            uri = (baseUrl + completeTaskEndpoint).replace("\$taskId", taskId)
+        )
+
+        sendRequest<Unit>(request)
+    }
+
     private inline fun <reified T> sendRequest(request: RequestEntity<Any>): ResponseEntity<T> {
         try {
             Logger.getGlobal().info("Sending request: $request")

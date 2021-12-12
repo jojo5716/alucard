@@ -11,4 +11,5 @@ interface IBaseTask {
         variables: Map<String, PayloadSchema>?
     )
     fun serviceTaskMessageTopic(): NewTopic
+    fun error(fetchAndLockResponse: FetchAndLockResponse, variables: Map<String, PayloadSchema>?)
 }

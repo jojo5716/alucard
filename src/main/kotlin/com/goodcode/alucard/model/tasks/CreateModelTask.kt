@@ -32,17 +32,15 @@ class CreateModelTask(
         super.execute(fetchAndLockResponse)
 
         try {
+            throw Exception("Manual error")
+
             val jsonParser = JsonParser()
             val fieldsParsed = jsonParser.parse(fetchAndLockResponse.variables.get("fields")?.value)
             val modelCreated = modelPresenter.create(fetchAndLockResponse.variables)
 
             (fieldsParsed as Iterable<*>).forEach {
                 val field: JsonObject = it as JsonObject
-                try {
-                    fieldPresenter.create(field, modelCreated)
-                } catch (ex: Exception) {
-                    Logger.getGlobal().severe("Error registering fields into model: $ex")
-                }
+                fieldPresenter.create(field, modelCreated)
             }
 
             val variables = mapOf(
@@ -52,6 +50,8 @@ class CreateModelTask(
             complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
             Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
+
+            error(fetchAndLockResponse, mapOf("ex" to PayloadSchema(type = "String", value = ex.message.toString())))
         }
     }
 

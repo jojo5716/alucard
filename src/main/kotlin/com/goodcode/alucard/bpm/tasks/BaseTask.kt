@@ -41,4 +41,12 @@ abstract class BaseTask(
         journeyGateway.complete(fetchAndLockResponse.id, variables?.plus(messageVariable) ?: messageVariable)
         kafkaTemplate.send(fetchTasksTopic, null)
     }
+
+    override fun error(fetchAndLockResponse: FetchAndLockResponse, variables: Map<String, PayloadSchema>?) {
+        Logger.getGlobal().info("Resolving as Error task: $fetchAndLockResponse.id with variables: $variables")
+
+        journeyGateway.error(fetchAndLockResponse.id, variables!!)
+        kafkaTemplate.send(fetchTasksTopic, null)
+    }
+
 }
