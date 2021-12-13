@@ -65,10 +65,10 @@ Upon receiving a request, the corresponding kafka event is dispatched, which wil
   "action": "CREATE_MODEL"
 }
 ```
-![](./src/main/resources/workflows/images/create_model.png "create model BPMN")
+![](https://github.com/jojo5716/alucard/blob/master/src/main/resources/workflows/images/create_model.png "create model BPMN")
 
 ## Insert new row in a model
-![](./src/main/resources/workflows/images/insert_model.png "Insert row into model")
+![](https://github.com/jojo5716/alucard/blob/master/src/main/resources/workflows/images/insert_model.png "Insert row into model")
 ````json
 
 ````
