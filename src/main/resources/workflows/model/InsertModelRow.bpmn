@@ -15,7 +15,7 @@
       <bpmn:incoming>Flow_0zg9j5q</bpmn:incoming>
       <bpmn:outgoing>Flow_0bk08z7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0a6i3uy" name="Check if all receive values are ok" camunda:type="external" camunda:topic="checkIfModelNameExistTopic">
+    <bpmn:serviceTask id="Activity_0a6i3uy" name="Check if all receive values are ok to create a model" camunda:type="external" camunda:topic="checkFieldModelValuesTopic">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="message">${message}</camunda:outputParameter>
@@ -51,7 +51,7 @@
     <bpmn:sequenceFlow id="Flow_0tiri45" name="Yes" sourceRef="Gateway_18w00yl" targetRef="Activity_180w2en">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidData == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Activity_180w2en" name="Register field values for a model" camunda:type="external" camunda:topic="registerFieldValuesTopic">
+    <bpmn:serviceTask id="Activity_180w2en" name="Register field values for a model" camunda:type="external" camunda:topic="registerFieldModelValuesTopic">
       <bpmn:incoming>Flow_0tiri45</bpmn:incoming>
       <bpmn:outgoing>Flow_01nmphz</bpmn:outgoing>
     </bpmn:serviceTask>
