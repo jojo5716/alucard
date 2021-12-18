@@ -4,7 +4,8 @@ import camundajar.impl.com.google.gson.JsonElement
 import com.goodcode.alucard.model.entities.FieldModel
 
 
-class TextAreaField(fieldModel: FieldModel, private val fieldValue: JsonElement?): Field(fieldModel, fieldValue), IBaseField {
+class TextAreaField(fieldModel: FieldModel, private val fieldValue: JsonElement?) : Field(fieldModel, fieldValue),
+    IBaseField {
     override fun isValidData(): Boolean {
         val isValidData = super.isValidData()
 
