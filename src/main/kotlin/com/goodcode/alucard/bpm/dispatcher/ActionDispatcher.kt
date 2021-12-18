@@ -12,6 +12,7 @@ class ActionDispatcher(
     override fun dispatch(action: String, body: BpmInstanceRequest) {
         when (action) {
             Actions.CREATE_MODEL.actionName -> kafkaTemplate.send(action, body)
+            Actions.INSERT_MODEL.actionName -> kafkaTemplate.send(action, body)
             else -> Logger.getGlobal().severe("Action invalid")
         }
     }

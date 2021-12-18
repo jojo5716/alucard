@@ -67,6 +67,7 @@ bpm:
     completeTask: /external-task/$taskId/complete
   processDefinitions:
     createModel: CreateModelProcess
+    insertModel: InsertModelProcess
 
 kafka:
   bootstrap-address: localhost:9092
@@ -79,5 +80,6 @@ kafka:
     checkIfModelNameExist: checkIfModelNameExistTopic
     createModel: createModelTopic
     notifyFrontEnd: notifyFrontEndTopic
-
+    checkInsertModelValues: checkInsertModelValuesTopic
     startCreateModelInstance: CREATE_MODEL
+    startInsertModelInstance: INSERT_MODEL

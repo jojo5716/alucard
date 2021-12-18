@@ -8,4 +8,5 @@ import java.util.*
 @Repository
 interface ModelRepository: CrudRepository<Model, UUID> {
     fun existsByName(modelName: String): Boolean
+    fun findByName(modelName: String): Model
 }

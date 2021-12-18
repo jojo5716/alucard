@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1pt23xm" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
-  <bpmn:process id="Process_0371lnm" isExecutable="true">
+  <bpmn:process id="InsertModelProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0zg9j5q</bpmn:outgoing>
     </bpmn:startEvent>
@@ -15,11 +15,11 @@
       <bpmn:incoming>Flow_0zg9j5q</bpmn:incoming>
       <bpmn:outgoing>Flow_0bk08z7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0a6i3uy" name="Check if all receive values are ok to create a model" camunda:type="external" camunda:topic="checkFieldModelValuesTopic">
+    <bpmn:serviceTask id="CheckInsertModelValuesTask" name="Check if all receive values are ok to create a model" camunda:type="external" camunda:topic="checkInsertModelValuesTopic">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="message">${message}</camunda:outputParameter>
-          <camunda:outputParameter name="modelExist">${modelExist}</camunda:outputParameter>
+          <camunda:outputParameter name="isValidData">${isValidData}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1itj7s8</bpmn:incoming>
@@ -31,11 +31,18 @@
       <bpmn:outgoing>Flow_1ni4eoa</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:intermediateThrowEvent id="Event_1yxmsyx" name="User has not permissions">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="message">${message}</camunda:outputParameter>
+          <camunda:outputParameter name="error">true</camunda:outputParameter>
+          <camunda:outputParameter name="userHasPermissions">false</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ni4eoa</bpmn:incoming>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_1b0vqjx" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_1b0vqjx" name="UserHasNotPermissionsCatchLink" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_0bk08z7" sourceRef="Activity_0myev30" targetRef="Gateway_07fapa7" />
-    <bpmn:sequenceFlow id="Flow_1itj7s8" name="Yes" sourceRef="Gateway_07fapa7" targetRef="Activity_0a6i3uy">
+    <bpmn:sequenceFlow id="Flow_1itj7s8" name="Yes" sourceRef="Gateway_07fapa7" targetRef="CheckInsertModelValuesTask">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userHasPermissions == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1ni4eoa" name="No" sourceRef="Gateway_07fapa7" targetRef="Event_1yxmsyx">
@@ -47,7 +54,7 @@
       <bpmn:outgoing>Flow_0tiri45</bpmn:outgoing>
       <bpmn:outgoing>Flow_01kqglr</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_08vvym4" sourceRef="Activity_0a6i3uy" targetRef="Gateway_18w00yl" />
+    <bpmn:sequenceFlow id="Flow_08vvym4" sourceRef="CheckInsertModelValuesTask" targetRef="Gateway_18w00yl" />
     <bpmn:sequenceFlow id="Flow_0tiri45" name="Yes" sourceRef="Gateway_18w00yl" targetRef="Activity_180w2en">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidData == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -76,7 +83,7 @@
     <bpmn:sequenceFlow id="Flow_01nmphz" sourceRef="Activity_180w2en" targetRef="Gateway_1hsecep" />
     <bpmn:intermediateThrowEvent id="Event_08i6msd" name="Field values are invalid">
       <bpmn:incoming>Flow_01kqglr</bpmn:incoming>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_0hhyf3h" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0hhyf3h" name="FieldValuesAreInvalidCatchLink" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_01kqglr" name="No" sourceRef="Gateway_18w00yl" targetRef="Event_08i6msd">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidData == "false"}</bpmn:conditionExpression>
@@ -89,7 +96,7 @@
     <bpmn:sequenceFlow id="Flow_13edsrg" sourceRef="Gateway_1hsecep" targetRef="Activity_0masz6l" />
     <bpmn:intermediateCatchEvent id="Event_17rdgs4" name="Receive user has not permissions">
       <bpmn:outgoing>Flow_032bcw5</bpmn:outgoing>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_0hx3blp" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0hx3blp" name="UserHasNotPermissionsCatchLink" />
     </bpmn:intermediateCatchEvent>
     <bpmn:exclusiveGateway id="Gateway_0sfskot">
       <bpmn:incoming>Flow_11pofnc</bpmn:incoming>
@@ -98,7 +105,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:intermediateCatchEvent id="Event_1ycsupk" name="Receive field values are invalid">
       <bpmn:outgoing>Flow_11pofnc</bpmn:outgoing>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_009qcuc" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_009qcuc" name="FieldValuesAreInvalidCatchLink" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_11pofnc" sourceRef="Event_1ycsupk" targetRef="Gateway_0sfskot" />
     <bpmn:sequenceFlow id="Flow_032bcw5" sourceRef="Event_17rdgs4" targetRef="Gateway_0sfskot" />
@@ -113,7 +120,7 @@
     <bpmn:categoryValue id="CategoryValue_0sne97s" />
   </bpmn:category>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0371lnm">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="InsertModelProcess">
       <bpmndi:BPMNShape id="TextAnnotation_05f1swx_di" bpmnElement="TextAnnotation_05f1swx">
         <dc:Bounds x="480" y="210" width="100" height="30" />
       </bpmndi:BPMNShape>
@@ -209,7 +216,7 @@
           <dc:Bounds x="734" y="334.5" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0a6i3uy_di" bpmnElement="Activity_0a6i3uy">
+      <bpmndi:BPMNShape id="Activity_0a6i3uy_di" bpmnElement="CheckInsertModelValuesTask">
         <dc:Bounds x="570" y="357" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1kkbzd7_di" bpmnElement="Activity_180w2en">
