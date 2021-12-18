@@ -10,11 +10,5 @@ sealed class Field(private val fieldModel: FieldModel, private val fieldValue: J
         return false !in listOf(isRequiredValid)
     }
 
-    override fun isRequiredValid(): Boolean {
-        println("\n\n fieldModel: $fieldModel")
-        println("value: $fieldValue")
-        println("is valid: ${((fieldModel.required && !fieldValue?.isJsonNull!!) || !fieldModel.required)} \n\n\n")
-
-        return (fieldModel.required && !fieldValue?.isJsonNull!!) || !fieldModel.required
-    }
+    override fun isRequiredValid(): Boolean = (fieldModel.required && !fieldValue?.isJsonNull!!) || !fieldModel.required
 }

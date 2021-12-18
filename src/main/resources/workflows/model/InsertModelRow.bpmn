@@ -67,11 +67,6 @@
       <bpmn:incoming>Flow_1a9hzsu</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_0masz6l" name="Notify front end" camunda:type="external" camunda:topic="notifyFrontEndTopic">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="output_test">testValue</camunda:outputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_13edsrg</bpmn:incoming>
       <bpmn:outgoing>Flow_1ex4ujk</bpmn:outgoing>
     </bpmn:serviceTask>

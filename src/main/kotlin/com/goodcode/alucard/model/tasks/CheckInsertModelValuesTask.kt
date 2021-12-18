@@ -35,16 +35,17 @@ class CheckInsertModelValuesTask(
         super.execute(fetchAndLockResponse)
         try {
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
-            val model : Model = modelRepository.findByName(modelName!!)
+            val model: Model = modelRepository.findByName(modelName!!)
             val modelFields = fieldRepository.findByModel(model)
-            val allFieldsAreOk : Map<String, Boolean> = modelFields.map {
+            val allFieldsAreOk: Map<String, Boolean> = modelFields.associate {
                 val jsonParser = JsonParser()
-                val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables.get("data")?.value) as JsonObject
+                val fieldValuesParsed =
+                    jsonParser.parse(fetchAndLockResponse.variables.get("data")?.value) as JsonObject
 
-                val field : Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
+                val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
 
                 (it.name to (field?.isValidData() ?: false))
-            }.toMap()
+            }
 
             val variables = mapOf(
                 "isValidData" to PayloadSchema(value = false !in allFieldsAreOk.values, type = "Boolean"),
@@ -54,6 +55,12 @@ class CheckInsertModelValuesTask(
             complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
             Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
+            val variables = mapOf(
+                "isValidData" to PayloadSchema(value = false, type = "Boolean"),
+                "fieldValidations" to PayloadSchema(value = "", type = "String")
+            )
+
+            complete(fetchAndLockResponse, variables)
         }
     }
 }
