@@ -3,4 +3,10 @@ package com.goodcode.alucard.model.fields
 import camundajar.impl.com.google.gson.JsonElement
 import com.goodcode.alucard.model.entities.FieldModel
 
-class InputField(fieldModel: FieldModel, fieldValue: JsonElement?): Field(fieldModel, fieldValue), IBaseField
+class InputField(fieldModel: FieldModel, private val fieldValue: JsonElement?): Field(fieldModel, fieldValue), IBaseField {
+    override fun isValidData(): Boolean {
+        val isValidData = super.isValidData()
+
+        return isValidData && fieldValue?.asString is String
+    }
+}

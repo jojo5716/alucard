@@ -10,5 +10,6 @@ sealed class Field(private val fieldModel: FieldModel, private val fieldValue: J
         return false !in listOf(isRequiredValid)
     }
 
-    override fun isRequiredValid(): Boolean = (fieldModel.required && !fieldValue?.isJsonNull!!) || !fieldModel.required
+    override fun isRequiredValid(): Boolean =
+        (fieldModel.required && fieldValue.toString().isNotEmpty()) || !fieldModel.required
 }
