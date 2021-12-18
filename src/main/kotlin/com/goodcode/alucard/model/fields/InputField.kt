@@ -7,6 +7,8 @@ class InputField(fieldModel: FieldModel, private val fieldValue: JsonElement?): 
     override fun isValidData(): Boolean {
         val isValidData = super.isValidData()
 
-        return isValidData && fieldValue?.asString is String
+        return if (isValidData && fieldValue !== null) {
+            isValidData && fieldValue.asString is String
+        } else isValidData
     }
 }
