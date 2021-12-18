@@ -1,11 +1,15 @@
 package com.goodcode.alucard.model.tasks
 
+import camundajar.impl.com.google.gson.JsonObject
+import camundajar.impl.com.google.gson.JsonParser
 import com.goodcode.alucard.bpm.requests.PayloadSchema
 import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
 import com.goodcode.alucard.bpm.tasks.BaseTask
 import com.goodcode.alucard.bpm.tasks.IBaseTask
 import com.goodcode.alucard.gateways.JourneyGateway
 import com.goodcode.alucard.model.entities.Model
+import com.goodcode.alucard.model.fields.Field
+import com.goodcode.alucard.model.fields.FieldLoader
 import com.goodcode.alucard.model.repositories.FieldRepository
 import com.goodcode.alucard.model.repositories.ModelRepository
 import org.springframework.beans.factory.annotation.Value
@@ -19,6 +23,7 @@ import java.util.logging.Logger
 class CheckInsertModelValuesTask(
     private val modelRepository: ModelRepository,
     private val fieldRepository: FieldRepository,
+    private val fieldLoader: FieldLoader,
     journeyGateway: JourneyGateway,
     kafkaTemplate: KafkaTemplate<String, Any>,
     @Value("\${kafka.topics.checkInsertModelValues}") private val checkInsertModelValuesTopic: String,
@@ -32,13 +37,18 @@ class CheckInsertModelValuesTask(
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
             val model : Model = modelRepository.findByName(modelName!!)
             val modelFields = fieldRepository.findByModel(model)
-            val allFieldsAreOk : List<Boolean> = modelFields.map {
-                println(it)
+            val allFieldsAreOk : Map<String, Boolean> = modelFields.map {
+                val jsonParser = JsonParser()
+                val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables.get("data")?.value) as JsonObject
 
-                false
-            }
+                val field : Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
+
+                (it.name to (field?.isValidData() ?: false))
+            }.toMap()
+
             val variables = mapOf(
-                "isValidData" to PayloadSchema(value = false, type = "Boolean")
+                "isValidData" to PayloadSchema(value = false !in allFieldsAreOk.values, type = "Boolean"),
+                "fieldValidations" to PayloadSchema(value = allFieldsAreOk, type = "String")
             )
 
             complete(fetchAndLockResponse, variables)

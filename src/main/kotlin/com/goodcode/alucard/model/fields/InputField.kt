@@ -1,8 +1,6 @@
 package com.goodcode.alucard.model.fields
 
-import com.goodcode.alucard.model.entities.Field
-import org.springframework.stereotype.Component
-import java.util.*
-import javax.persistence.*
+import camundajar.impl.com.google.gson.JsonElement
+import com.goodcode.alucard.model.entities.FieldModel
 
-class InputField( private val field: Field): BaseField(), IBaseField
+class InputField(fieldModel: FieldModel, fieldValue: JsonElement?): Field(fieldModel, fieldValue), IBaseField

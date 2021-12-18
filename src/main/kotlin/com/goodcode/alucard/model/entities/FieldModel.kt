@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "fields")
-data class Field(
+data class FieldModel(
     @Id
     @GeneratedValue
     val id: UUID? = null,
@@ -31,7 +31,7 @@ data class Field(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Field
+        other as FieldModel
 
         return id != null && id == other.id
     }
