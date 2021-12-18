@@ -5,5 +5,6 @@ interface IFieldTypes {
 }
 
 enum class FieldTypes(override val fieldType: String) : IFieldTypes {
-    INPUT(fieldType = "input")
+    INPUT(fieldType = "input"),
+    TEXT_AREA(fieldType = "textarea")
 }

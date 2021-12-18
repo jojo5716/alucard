@@ -12,6 +12,7 @@ class FieldLoader {
     fun loadFieldByElement(fieldModel: FieldModel, fieldValue: JsonElement?): Field? {
         return when (fieldModel.element) {
             FieldTypes.INPUT.fieldType -> InputField(fieldModel, fieldValue)
+            FieldTypes.TEXT_AREA.fieldType -> TextAreaField(fieldModel, fieldValue)
             else -> {
                 Logger.getGlobal().info("Field does not exist: $fieldModel")
                 null
