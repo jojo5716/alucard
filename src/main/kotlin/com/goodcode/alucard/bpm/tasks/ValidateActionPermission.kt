@@ -21,12 +21,23 @@ class ValidateActionPermission(
     @KafkaListener(topics = ["\${kafka.topics.validateActionPermission}"], groupId = "\${kafka.group-id}")
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
         super.execute(fetchAndLockResponse)
-        val variables = mapOf("userHasPermissions" to PayloadSchema(value = true, type = "Boolean"))
 
         try {
-            complete(fetchAndLockResponse, variables)
+            complete(
+                fetchAndLockResponse, mapOf(
+                    "userHasPermissions" to PayloadSchema(value = true, type = "Boolean"),
+                    "message" to PayloadSchema(value = "ValidateActionPermission message", type = "String")
+                )
+            )
         } catch (ex: Exception) {
             Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
+
+            error(
+                fetchAndLockResponse, mapOf(
+                    "userHasPermissions" to PayloadSchema(value = false, type = "Boolean"),
+                    "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                )
+            )
         }
     }
 }

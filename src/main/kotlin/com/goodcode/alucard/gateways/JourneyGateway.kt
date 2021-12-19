@@ -71,7 +71,7 @@ class JourneyGateway(
         }
     }
 
-    fun complete(taskId: String, variables: Map<String, PayloadSchema>) {
+    fun complete(taskId: String, variables: Map<String, PayloadSchema>?) {
         val request = requestBuilder.post(
             body = CompleteTaskRequest(workerId = workerId, variables = variables),
             uri = (baseUrl + completeTaskEndpoint).replace("\$taskId", taskId)

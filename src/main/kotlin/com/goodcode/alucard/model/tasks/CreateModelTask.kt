@@ -41,15 +41,18 @@ class CreateModelTask(
                 fieldPresenter.create(field, modelCreated)
             }
 
-            val variables = mapOf(
-                "modelId" to PayloadSchema(value = modelCreated.id.toString(), type = "String")
+            complete(
+                fetchAndLockResponse, mapOf(
+                    "modelId" to PayloadSchema(value = modelCreated.id.toString(), type = "String")
+                )
             )
-
-            complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
-            Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
-
-            error(fetchAndLockResponse, mapOf("ex" to PayloadSchema(type = "String", value = ex.message.toString())))
+            error(
+                fetchAndLockResponse, mapOf(
+                    "error" to PayloadSchema(value = true, type = "Boolean"),
+                    "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                )
+            )
         }
     }
 

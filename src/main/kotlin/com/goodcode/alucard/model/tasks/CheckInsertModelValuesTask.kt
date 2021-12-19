@@ -45,21 +45,21 @@ class CheckInsertModelValuesTask(
                 (it.name to (field?.isValidData() ?: false))
             }
 
-            val variables = mapOf(
-                "isValidData" to PayloadSchema(value = false !in allFieldsAreOk.values, type = "Boolean"),
-                "fieldValidations" to PayloadSchema(value = allFieldsAreOk, type = "String")
+            complete(
+                fetchAndLockResponse, mapOf(
+                    "isValidData" to PayloadSchema(value = false !in allFieldsAreOk.values, type = "Boolean"),
+                    "fieldValidations" to PayloadSchema(value = allFieldsAreOk, type = "String"),
+                    "message" to PayloadSchema(value = "CheckInsertModelValuesTask message", type = "String")
+                )
             )
-
-            complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
-            Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
-            val variables = mapOf(
-                "isValidData" to PayloadSchema(value = false, type = "Boolean"),
-                "fieldValidations" to PayloadSchema(value = "", type = "String"),
-                "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+            error(
+                fetchAndLockResponse, mapOf(
+                    "isValidData" to PayloadSchema(value = false, type = "Boolean"),
+                    "fieldValidations" to PayloadSchema(value = "", type = "String"),
+                    "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                )
             )
-
-            complete(fetchAndLockResponse, variables)
         }
     }
 }

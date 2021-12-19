@@ -2,7 +2,6 @@ package com.goodcode.alucard.bpm.tasks
 
 import com.goodcode.alucard.bpm.requests.PayloadSchema
 import com.goodcode.alucard.bpm.responses.FetchAndLockResponse
-import com.goodcode.alucard.dto.CamundaMessageDto
 import com.goodcode.alucard.gateways.JourneyGateway
 import org.apache.kafka.clients.admin.NewTopic
 import org.springframework.beans.factory.annotation.Value
@@ -16,7 +15,7 @@ abstract class BaseTask(
     private val journeyGateway: JourneyGateway,
     private val kafkaTemplate: KafkaTemplate<String, Any>,
     @Value("\${kafka.topics.fetchTasks}") private val fetchTasksTopic: String
-    ) : IBaseTask {
+) : IBaseTask {
 
     @Bean
     override fun serviceTaskMessageTopic(): NewTopic {
@@ -32,20 +31,14 @@ abstract class BaseTask(
         variables: Map<String, PayloadSchema>?
     ) {
         Logger.getGlobal().info("Completing task: $fetchAndLockResponse with variables: $variables")
-        var messageVariable = mapOf<String, PayloadSchema>()
 
-        if (variables?.get("message") == null) {
-            messageVariable = mapOf("message" to PayloadSchema(value = "", type = "String"))
-        }
-
-        journeyGateway.complete(fetchAndLockResponse.id, variables?.plus(messageVariable) ?: messageVariable)
+        journeyGateway.complete(fetchAndLockResponse.id, variables)
         kafkaTemplate.send(fetchTasksTopic, null)
     }
 
     override fun error(fetchAndLockResponse: FetchAndLockResponse, variables: Map<String, PayloadSchema>?) {
-        Logger.getGlobal().info("Resolving as Error task: $fetchAndLockResponse.id with variables: $variables")
+        Logger.getGlobal().severe("Error executing task: $fetchAndLockResponse with variables: $variables")
 
-        journeyGateway.error(fetchAndLockResponse.id, variables!!)
-        kafkaTemplate.send(fetchTasksTopic, null)
+       complete(fetchAndLockResponse, variables)
     }
 }

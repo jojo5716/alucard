@@ -60,12 +60,6 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidData == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Activity_180w2en" name="Register field values for a model" camunda:type="external" camunda:topic="registerFieldModelValuesTopic">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="message">${message}</camunda:outputParameter>
-          <camunda:outputParameter name="error">${error}</camunda:outputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0tiri45</bpmn:incoming>
       <bpmn:outgoing>Flow_01nmphz</bpmn:outgoing>
     </bpmn:serviceTask>

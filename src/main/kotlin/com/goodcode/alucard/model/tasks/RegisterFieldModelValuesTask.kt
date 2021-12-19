@@ -45,25 +45,24 @@ class RegisterFieldModelValuesTask(
 
                 if (field !== null) {
                     field.insertData()
-                }else {
+                } else {
                     Logger.getGlobal().severe("Cannot insert value for field $it")
                 }
             }
 
-            val variables = mapOf(
-                "error" to PayloadSchema(value = false, type = "Boolean"),
-                "message" to PayloadSchema(value = "Fields registered successfully", type = "String")
+            complete(
+                fetchAndLockResponse, mapOf(
+                    "error" to PayloadSchema(value = false, type = "Boolean"),
+                    "message" to PayloadSchema(value = "Fields registered successfully", type = "String")
+                )
             )
-
-            complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
-            Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
-            val variables = mapOf(
-                "error" to PayloadSchema(value = true, type = "Boolean"),
-                "message" to PayloadSchema(value = "Error registering values", type = "String")
+            error(
+                fetchAndLockResponse, mapOf(
+                    "error" to PayloadSchema(value = true, type = "Boolean"),
+                    "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                )
             )
-
-            complete(fetchAndLockResponse, variables)
         }
     }
 }

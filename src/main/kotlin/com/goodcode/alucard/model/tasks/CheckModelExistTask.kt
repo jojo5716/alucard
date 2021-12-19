@@ -28,13 +28,20 @@ class CheckModelExistTask(
 
         try {
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
-            val variables = mapOf(
-                "modelExist" to PayloadSchema(value = modelRepository.existsByName(modelName!!), type = "Boolean")
-            )
 
-            complete(fetchAndLockResponse, variables)
+            complete(
+                fetchAndLockResponse, mapOf(
+                    "modelExist" to PayloadSchema(value = modelRepository.existsByName(modelName!!), type = "Boolean")
+                )
+            )
         } catch (ex: Exception) {
-            Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
+            error(
+                fetchAndLockResponse, mapOf(
+                    "modelExist" to PayloadSchema(value = true, type = "Boolean"),
+                    "error" to PayloadSchema(value = true, type = "Boolean"),
+                    "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                )
+            )
         }
     }
 }
