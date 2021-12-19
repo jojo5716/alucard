@@ -6,28 +6,20 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "field_values")
-data class FieldValueModel(
+@Table(name = "documents")
+data class DocumentModel(
     @Id
     @GeneratedValue
     val id: UUID? = null,
 
-    @OneToOne(targetEntity = FieldModel::class)
-    @JoinColumn(name = "field_id", referencedColumnName = "id")
-    var fieldModel: FieldModel,
-
-    @OneToOne(targetEntity = DocumentModel::class)
-    @JoinColumn(name = "documents_id", referencedColumnName = "id")
-    var documentModel: DocumentModel,
-
-    @Column(name = "value")
-    val value: String
-
+    @OneToOne(targetEntity = Model::class)
+    @JoinColumn(name = "models_id", referencedColumnName = "id")
+    var model: Model
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as FieldValueModel
+        other as DocumentModel
 
         return id != null && id == other.id
     }
@@ -36,6 +28,6 @@ data class FieldValueModel(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(value = $value , field = $fieldModel )"
+        return this::class.simpleName + "(model = $model )"
     }
 }

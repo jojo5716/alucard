@@ -10,6 +10,8 @@ import com.goodcode.alucard.gateways.JourneyGateway
 import com.goodcode.alucard.model.entities.Model
 import com.goodcode.alucard.model.fields.Field
 import com.goodcode.alucard.model.fields.FieldLoader
+import com.goodcode.alucard.model.presenters.DocumentPresenter
+import com.goodcode.alucard.model.repositories.DocumentRepository
 import com.goodcode.alucard.model.repositories.FieldRepository
 import com.goodcode.alucard.model.repositories.ModelRepository
 import org.springframework.beans.factory.annotation.Value
@@ -23,6 +25,7 @@ import java.util.logging.Logger
 class RegisterFieldModelValuesTask(
     private val modelRepository: ModelRepository,
     private val fieldRepository: FieldRepository,
+    private val documentPresenter: DocumentPresenter,
     private val fieldLoader: FieldLoader,
     journeyGateway: JourneyGateway,
     kafkaTemplate: KafkaTemplate<String, Any>,
@@ -39,12 +42,13 @@ class RegisterFieldModelValuesTask(
             val modelFields = fieldRepository.findByModel(model)
             val jsonParser = JsonParser()
             val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables["data"]?.value) as JsonObject
+            val documentModel = documentPresenter.create(model)
 
             modelFields.forEach {
                 val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
 
                 if (field !== null) {
-                    field.insertData()
+                    field.insertData(documentModel)
                 } else {
                     Logger.getGlobal().severe("Cannot insert value for field $it")
                 }
