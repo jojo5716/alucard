@@ -20,17 +20,17 @@ import java.util.logging.Logger
 
 
 @Component
-class CheckInsertModelValuesTask(
+class RegisterFieldModelValuesTask(
     private val modelRepository: ModelRepository,
     private val fieldRepository: FieldRepository,
     private val fieldLoader: FieldLoader,
     journeyGateway: JourneyGateway,
     kafkaTemplate: KafkaTemplate<String, Any>,
-    @Value("\${kafka.topics.checkInsertModelValues}") private val checkInsertModelValuesTopic: String,
+    @Value("\${kafka.topics.registerFieldModelValues}") private val registerFieldModelValuesTopic: String,
     @Value("\${kafka.topics.fetchTasks}") private val fetchTasksTopic: String
-) : BaseTask(checkInsertModelValuesTopic, journeyGateway, kafkaTemplate, fetchTasksTopic), IBaseTask {
+) : BaseTask(registerFieldModelValuesTopic, journeyGateway, kafkaTemplate, fetchTasksTopic), IBaseTask {
 
-    @KafkaListener(topics = ["\${kafka.topics.checkInsertModelValues}"], groupId = "\${kafka.group-id}")
+    @KafkaListener(topics = ["\${kafka.topics.registerFieldModelValues}"], groupId = "\${kafka.group-id}")
     override fun execute(fetchAndLockResponse: FetchAndLockResponse) {
         super.execute(fetchAndLockResponse)
         try {
@@ -39,24 +39,28 @@ class CheckInsertModelValuesTask(
             val modelFields = fieldRepository.findByModel(model)
             val jsonParser = JsonParser()
             val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables["data"]?.value) as JsonObject
-            val allFieldsAreOk: Map<String, Boolean> = modelFields.associate {
+
+            modelFields.forEach {
                 val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
 
-                (it.name to (field?.isValidData() ?: false))
+                if (field !== null) {
+                    field.insertData()
+                }else {
+                    Logger.getGlobal().severe("Cannot insert value for field $it")
+                }
             }
 
             val variables = mapOf(
-                "isValidData" to PayloadSchema(value = false !in allFieldsAreOk.values, type = "Boolean"),
-                "fieldValidations" to PayloadSchema(value = allFieldsAreOk, type = "String")
+                "error" to PayloadSchema(value = false, type = "Boolean"),
+                "message" to PayloadSchema(value = "Fields registered successfully", type = "String")
             )
 
             complete(fetchAndLockResponse, variables)
         } catch (ex: Exception) {
             Logger.getGlobal().severe("Error executing task $fetchAndLockResponse: $ex")
             val variables = mapOf(
-                "isValidData" to PayloadSchema(value = false, type = "Boolean"),
-                "fieldValidations" to PayloadSchema(value = "", type = "String"),
-                "message" to PayloadSchema(value = ex.message.toString(), type = "String")
+                "error" to PayloadSchema(value = true, type = "Boolean"),
+                "message" to PayloadSchema(value = "Error registering values", type = "String")
             )
 
             complete(fetchAndLockResponse, variables)

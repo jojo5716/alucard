@@ -10,6 +10,7 @@ spring:
   h2:
     console:
       enabled: true
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    show-sql: true
@@ -81,5 +82,6 @@ kafka:
     createModel: createModelTopic
     notifyFrontEnd: notifyFrontEndTopic
     checkInsertModelValues: checkInsertModelValuesTopic
+    registerFieldModelValues: registerFieldModelValuesTopic
     startCreateModelInstance: CREATE_MODEL
     startInsertModelInstance: INSERT_MODEL

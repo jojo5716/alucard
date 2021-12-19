@@ -2,8 +2,14 @@ package com.goodcode.alucard.model.fields
 
 import camundajar.impl.com.google.gson.JsonElement
 import com.goodcode.alucard.model.entities.FieldModel
+import com.goodcode.alucard.model.entities.FieldValueModel
+import com.goodcode.alucard.model.presenters.FieldValuePresenter
 
-sealed class Field(private val fieldModel: FieldModel, private val fieldValue: JsonElement?) : IBaseField {
+sealed class Field(
+    private val fieldModel: FieldModel,
+    private val fieldValue: JsonElement?,
+    private val fieldValuePresenter: FieldValuePresenter
+) : IBaseField {
     override fun isValidData(): Boolean {
         val isRequiredValid = this.isRequiredValid()
 
@@ -12,4 +18,8 @@ sealed class Field(private val fieldModel: FieldModel, private val fieldValue: J
 
     override fun isRequiredValid(): Boolean =
         (fieldModel.required && fieldValue !== null && fieldValue.toString().isNotEmpty()) || !fieldModel.required
+
+    override fun insertData(): FieldValueModel {
+        return fieldValuePresenter.create(fieldValue, fieldModel)
+    }
 }
