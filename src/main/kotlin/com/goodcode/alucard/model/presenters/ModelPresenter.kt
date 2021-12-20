@@ -13,4 +13,8 @@ class ModelPresenter(private val modelRepository: ModelRepository) {
                 name = "${variables["modelName"]?.value}"
             )
         )
+
+    fun findByName(modelName: String?): Model {
+        return modelRepository.findByName(modelName!!)
+    }
 }

@@ -18,9 +18,8 @@
     <bpmn:serviceTask id="GetDocumentsFromModelTask" name="Getting documents for a model" camunda:type="external" camunda:topic="getDocumentsFromModelTopic">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="fieldValidations">${fieldValidations}</camunda:outputParameter>
-          <camunda:outputParameter name="message" />
-          <camunda:outputParameter name="isValidData">${isValidData}</camunda:outputParameter>
+          <camunda:outputParameter name="message">${message}</camunda:outputParameter>
+          <camunda:outputParameter name="documents">${documents}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_08vue3l</bpmn:incoming>

@@ -14,4 +14,12 @@ class DocumentPresenter(private val documentRepository: DocumentRepository) {
                 model = model
             )
         )
+
+    fun findAll(model: Model): Iterable<DocumentModel> {
+        return if (model.id !== null) {
+            documentRepository.findAllActives(model)
+        } else {
+            emptyList()
+        }
+    }
 }
