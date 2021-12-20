@@ -13,7 +13,8 @@ class ActionDispatcher(
         when (action) {
             Actions.CREATE_MODEL.actionName -> kafkaTemplate.send(action, body)
             Actions.INSERT_MODEL.actionName -> kafkaTemplate.send(action, body)
-            else -> Logger.getGlobal().severe("Action invalid")
+            Actions.GET_DOCUMENTS_MODEL.actionName -> kafkaTemplate.send(action, body)
+            else -> Logger.getGlobal().severe("Action invalid: $action")
         }
     }
 }

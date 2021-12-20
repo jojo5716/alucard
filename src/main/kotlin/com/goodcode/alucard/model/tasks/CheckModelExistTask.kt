@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
-import java.util.logging.Logger
 
 
 @Component
@@ -28,10 +27,13 @@ class CheckModelExistTask(
 
         try {
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
+            val modelExist = modelRepository.existsByName(modelName!!)
+            val message: String = if (!modelExist) "Model does not exist" else ""
 
             complete(
                 fetchAndLockResponse, mapOf(
-                    "modelExist" to PayloadSchema(value = modelRepository.existsByName(modelName!!), type = "Boolean")
+                    "modelExist" to PayloadSchema(value = modelExist, type = "Boolean"),
+                    "message" to PayloadSchema(value = message, type = "String")
                 )
             )
         } catch (ex: Exception) {

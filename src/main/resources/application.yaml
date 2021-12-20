@@ -69,6 +69,7 @@ bpm:
   processDefinitions:
     createModel: CreateModelProcess
     insertModel: InsertModelProcess
+    getDocumentsFromModel: GetDocumentsFromModelProcess
 
 kafka:
   bootstrap-address: localhost:9092
@@ -83,5 +84,7 @@ kafka:
     notifyFrontEnd: notifyFrontEndTopic
     checkInsertModelValues: checkInsertModelValuesTopic
     registerFieldModelValues: registerFieldModelValuesTopic
+    getDocumentsFromModel: getDocumentsFromModelTopic
     startCreateModelInstance: CREATE_MODEL
     startInsertModelInstance: INSERT_MODEL
+    startGetDocumentsFromModelInstance: GET_DOCUMENTS_MODEL

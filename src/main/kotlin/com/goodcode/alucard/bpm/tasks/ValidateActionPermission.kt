@@ -26,7 +26,7 @@ class ValidateActionPermission(
             complete(
                 fetchAndLockResponse, mapOf(
                     "userHasPermissions" to PayloadSchema(value = true, type = "Boolean"),
-                    "message" to PayloadSchema(value = "ValidateActionPermission message", type = "String")
+                    "message" to PayloadSchema(value = "", type = "String")
                 )
             )
         } catch (ex: Exception) {
