@@ -17,4 +17,6 @@ class FieldValuePresenter(private val fieldValueRepository: FieldValueRepository
                 documentModel = documentModel
             )
         )
+
+    fun findByDocument(documentModel: DocumentModel) =  fieldValueRepository.findByDocument(documentModel)
 }

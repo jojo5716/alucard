@@ -10,6 +10,7 @@ import com.goodcode.alucard.gateways.JourneyGateway
 import com.goodcode.alucard.model.entities.Model
 import com.goodcode.alucard.model.fields.Field
 import com.goodcode.alucard.model.fields.FieldLoader
+import com.goodcode.alucard.model.presenters.FieldPresenter
 import com.goodcode.alucard.model.repositories.FieldRepository
 import com.goodcode.alucard.model.repositories.ModelRepository
 import org.springframework.beans.factory.annotation.Value
@@ -22,7 +23,7 @@ import java.util.logging.Logger
 @Component
 class CheckInsertModelValuesTask(
     private val modelRepository: ModelRepository,
-    private val fieldRepository: FieldRepository,
+    private val fieldPresenter: FieldPresenter,
     private val fieldLoader: FieldLoader,
     journeyGateway: JourneyGateway,
     kafkaTemplate: KafkaTemplate<String, Any>,
@@ -36,7 +37,7 @@ class CheckInsertModelValuesTask(
         try {
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
             val model: Model = modelRepository.findByName(modelName!!)
-            val modelFields = fieldRepository.findByModel(model)
+            val modelFields = fieldPresenter.findByModel(model)
             val jsonParser = JsonParser()
             val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables["data"]?.value) as JsonObject
             val allFieldsAreOk: Map<String, Boolean> = modelFields.associate {

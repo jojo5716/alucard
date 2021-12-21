@@ -11,5 +11,5 @@ import java.util.*
 @Repository
 interface DocumentRepository : CrudRepository<DocumentModel, UUID> {
     @Query("FROM DocumentModel document WHERE document.model=:model")
-    fun findAllActives(@Param("model") model:Model): Iterable<DocumentModel>
+    fun findAll(@Param("model") model:Model): Iterable<DocumentModel>
 }

@@ -12,6 +12,7 @@ import com.goodcode.alucard.model.entities.Model
 import com.goodcode.alucard.model.presenters.DocumentPresenter
 import com.goodcode.alucard.model.presenters.FieldPresenter
 import com.goodcode.alucard.model.presenters.ModelPresenter
+import com.goodcode.alucard.model.services.DocumentService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.core.KafkaTemplate
@@ -23,8 +24,7 @@ import java.util.logging.Logger
 class GetDocumentsFromModelTask(
     journeyGateway: JourneyGateway,
     kafkaTemplate: KafkaTemplate<String, Any>,
-    private val documentPresenter: DocumentPresenter,
-    private val modelPresenter: ModelPresenter,
+    private val documentService: DocumentService,
     @Value("\${kafka.topics.getDocumentsFromModel}") private val getDocumentsFromModelTopic: String,
     @Value("\${kafka.topics.fetchTasks}") private val fetchTasksTopic: String
 ) : BaseTask(getDocumentsFromModelTopic, journeyGateway, kafkaTemplate, fetchTasksTopic), IBaseTask {
@@ -35,12 +35,11 @@ class GetDocumentsFromModelTask(
 
         try {
             val modelName = fetchAndLockResponse.variables["modelName"]?.value
-            val model: Model = modelPresenter.findByName(modelName!!)
-            val documents = documentPresenter.findAll(model)
+            val documents = documentService.getDocumentsFromModel(modelName!!)
 
             complete(
                 fetchAndLockResponse, mapOf(
-                    "documents" to PayloadSchema(value = documents.toString(), type = "String"),
+                    "documents" to PayloadSchema(value = "$documents", type = "String"),
                     "message" to PayloadSchema(value = "Document retrieved", type = "String")
                 )
             )

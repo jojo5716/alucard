@@ -18,4 +18,7 @@ class FieldPresenter(private val fieldRepository: FieldRepository) {
                 model = modelCreated
             )
         )
+
+    fun findByModel(model: Model): List<FieldModel> =
+        fieldRepository.findByModel(model)
 }
