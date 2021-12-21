@@ -1,5 +1,6 @@
 package com.goodcode.alucard.model.services
 
+import camundajar.impl.com.google.gson.Gson
 import com.goodcode.alucard.bpm.requests.PayloadSchema
 import com.goodcode.alucard.model.entities.DocumentModel
 import com.goodcode.alucard.model.entities.Model
@@ -20,22 +21,29 @@ class DocumentService(
     override fun parseDocumentByModelFields(
         documents: Iterable<DocumentModel>,
         model: Model
-    ): List<Map<String, PayloadSchema>> {
+    ): List<Map<String, String?>> {
+        val gson = Gson()
+
         return documents.map { document ->
-            val documentData = emptyMap<String, PayloadSchema>().toMutableMap()
+            val documentData = emptyMap<String, String?>().toMutableMap()
             val fieldValues = fieldValuePresenter.findByDocument(document)
+
             fieldValues.forEach { fieldValue ->
                 val field: Field? = fieldLoader.loadFieldByElement(fieldValue.fieldModel, fieldValue.value)
 
-                documentData[fieldValue.fieldModel.name] = PayloadSchema(
-                    value = field?.value()!!,
-                    type = field.valueType())
+                documentData[fieldValue.fieldModel.name] = gson.toJson(
+                    PayloadSchema(
+                        value = field?.value()!!,
+                        type = field.valueType()
+                    )
+                )
             }
+
             documentData
         }
     }
 
-    override fun getDocumentsFromModel(modelName: String): List<Map<String, PayloadSchema>> {
+    override fun getDocumentsFromModel(modelName: String): List<Map<String, String?>> {
         val model: Model = modelPresenter.findByName(modelName)
 
         return parseDocumentByModelFields(documentPresenter.findAll(model), model)
