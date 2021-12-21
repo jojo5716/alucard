@@ -12,6 +12,14 @@ sealed class Field(
 ) : IBaseField {
     override fun valueType(): String = "String"
 
+    override fun value(): String {
+        return if (fieldModel.type != "password") {
+            fieldValue!!
+        } else {
+            ""
+        }
+    }
+
     override fun isValidData(): Boolean {
         val isRequiredValid = this.isRequiredValid()
 

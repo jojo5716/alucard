@@ -28,8 +28,8 @@ class DocumentService(
                 val field: Field? = fieldLoader.loadFieldByElement(fieldValue.fieldModel, fieldValue.value)
 
                 documentData[fieldValue.fieldModel.name] = PayloadSchema(
-                    value = fieldValue.value,
-                    type = field?.valueType()!!)
+                    value = field?.value()!!,
+                    type = field.valueType())
             }
             documentData
         }

@@ -8,4 +8,5 @@ sealed interface IBaseField {
     fun isValidData(): Boolean
     fun isRequiredValid(): Boolean
     fun insertData(documentModel: DocumentModel): FieldValueModel
+    fun value(): String?
 }
