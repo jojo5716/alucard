@@ -45,7 +45,7 @@ class RegisterFieldModelValuesTask(
             val documentModel = documentPresenter.create(model)
 
             modelFields.forEach {
-                val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
+                val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name).asString)
 
                 if (field !== null) {
                     field.insertData(documentModel)

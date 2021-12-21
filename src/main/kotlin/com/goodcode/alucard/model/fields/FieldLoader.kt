@@ -11,7 +11,7 @@ import java.util.logging.Logger
 class FieldLoader(private val fieldValuePresenter: FieldValuePresenter) {
     fun loadFieldByElement(
         fieldModel: FieldModel,
-        fieldValue: JsonElement?
+        fieldValue: String?
     ): Field? {
         return when (fieldModel.element) {
             FieldTypes.INPUT.fieldType -> InputField(fieldModel, fieldValuePresenter, fieldValue)

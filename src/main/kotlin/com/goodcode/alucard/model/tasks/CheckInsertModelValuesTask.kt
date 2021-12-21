@@ -41,7 +41,7 @@ class CheckInsertModelValuesTask(
             val jsonParser = JsonParser()
             val fieldValuesParsed = jsonParser.parse(fetchAndLockResponse.variables["data"]?.value) as JsonObject
             val allFieldsAreOk: Map<String, Boolean> = modelFields.associate {
-                val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name))
+                val field: Field? = fieldLoader.loadFieldByElement(it, fieldValuesParsed.get(it.name).asString)
 
                 (it.name to (field?.isValidData() ?: false))
             }

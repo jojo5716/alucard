@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class FieldValuePresenter(private val fieldValueRepository: FieldValueRepository) {
-    fun create(fieldData: JsonElement?, fieldModel: FieldModel, documentModel: DocumentModel) =
+    fun create(fieldData: String?, fieldModel: FieldModel, documentModel: DocumentModel) =
         fieldValueRepository.save(
             FieldValueModel(
-                value = fieldData?.asString.toString(),
+                value = fieldData!!,
                 fieldModel = fieldModel,
                 documentModel = documentModel
             )
